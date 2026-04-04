@@ -21,18 +21,19 @@ void repeat_each(int* base_array, int base_array_size, int k, int** return_array
 
 void ordering_permutation(int* base_array, int** ordering_permutation, int array_size){
     *ordering_permutation = malloc(array_size * sizeof(int));
-    for (int i=0;i<array_size; i++) *ordering_permutation[i] = i;
+    for (int i=0;i<array_size; i++) (*ordering_permutation)[i] = i;
     for (int i=0;i<array_size; i++){
-        int biggest = base_array[i];
+        int biggest = base_array[(*ordering_permutation)[i]];
         int biggest_index = i;
         for (int j=i;j<array_size; j++){
-            if (base_array[j] > biggest) {
-                biggest = base_array[j];
+            if (base_array[(*ordering_permutation)[j]] > biggest) {
+                biggest = base_array[(*ordering_permutation)[j]];
                 biggest_index = j;
             }
         }
-        *ordering_permutation[i] = biggest_index;
-        *ordering_permutation[biggest_index] = i;
+        int temp = (*ordering_permutation)[i];
+        (*ordering_permutation)[i] = (*ordering_permutation)[biggest_index];
+        (*ordering_permutation)[biggest_index] = temp;
     }
 }
 
