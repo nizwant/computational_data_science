@@ -1,0 +1,32 @@
+SOURCES=lab03a-main.c lab03a-sum.c
+OBJECTS=$(SOURCES:.c=.o)
+HEADERS=lab03a-stuff.h
+EXECUTABLE=sum
+
+# CC, CFLAGS, CPPFLAGS, LDFLAGS - taken from environment variables
+
+all : $(EXECUTABLE)
+
+$(EXECUTABLE) : $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ -o $@
+	#gcc $(OBJECTS) -o $(EXECUTABLE)
+
+%.o : %.c $(HEADERS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+clean :
+	rm -f $(OBJECTS) $(EXECUTABLE)
+
+# 	all : sum
+#
+# sum : lab03a-main.o lab03a-sum.o
+# 	gcc lab03a-main.o lab03a-sum.o -o sum
+#
+# lab03a-main.o : lab03a-main.c lab03a-stuff.h
+# 	gcc -c lab03a-main.c -o lab03a-main.o
+#
+# lab03a-sum.o : lab03a-sum.c lab03a-stuff.h
+# 	gcc -c lab03a-sum.c -o lab03a-sum.o
+#
+# clean :
+# 	rm -f lab03a-sum.o lab03a-main.o sum
