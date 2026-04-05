@@ -37,6 +37,27 @@ void ordering_permutation(int* base_array, int** ordering_permutation, int array
     }
 }
 
+void partition(int* array, int* array_size, int v, int** smaller, int** larger, int* smaller_size, int* larger_size){
+    for (int i=0; i<*array_size; i++){
+        if (array[i] > v) (*larger_size)++;
+    }
+    *smaller_size = *array_size - *larger_size;
+    *larger = (int *)malloc(*larger_size * sizeof(int));
+    *smaller = (int *)malloc(*smaller_size * sizeof(int));
+    int larger_counter = 0;
+    int smaller_counter = 0;
+    for (int i=0; i<*array_size; i++){
+        if (array[i] > v){
+            (*larger)[larger_counter] = array[i];
+            larger_counter++;
+        }
+        else {
+            (*smaller)[smaller_counter] = array[i];
+            smaller_counter++;
+        }
+    } 
+}
+
 
 int main(){
     srand(time(NULL));
@@ -75,9 +96,30 @@ int main(){
         printf("%d, ", ordering_permutation_array[i]);
     }
 
+    int* smaller;
+    int* larger;
+    int* size_pointer;
+    int smaller_size, larger_size;
+    size_pointer = &size;
+    partition(to_sort, size_pointer, 3, &smaller, &larger, &smaller_size, &larger_size);
+
+    printf("\n");
+
+    for (int i=0; i<smaller_size; i++){
+        printf("%d, ", smaller[i]);
+    }
+
+    printf("\n");
+
+    for (int i=0; i<larger_size; i++){
+        printf("%d, ", larger[i]);
+    }
+
     free(array);
     free(return_array);
     free(ordering_permutation_array);
+    free(smaller);
+    free(larger);
 
 
     return 0;
