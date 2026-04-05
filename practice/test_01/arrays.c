@@ -38,6 +38,7 @@ void ordering_permutation(int* base_array, int** ordering_permutation, int array
 }
 
 void partition(int* array, int* array_size, int v, int** smaller, int** larger, int* smaller_size, int* larger_size){
+    *larger_size = 0;
     for (int i=0; i<*array_size; i++){
         if (array[i] > v) (*larger_size)++;
     }
@@ -82,7 +83,8 @@ int main(){
     printf("\n\n\n");
 
     int to_sort[] = {2,1,3,7,27,21,-1,-20,3};
-    int size = *(&to_sort + 1) - to_sort;
+    int size = sizeof(to_sort) / sizeof(to_sort[0]);
+    // int size = *(&to_sort + 1) - to_sort;
     int* ordering_permutation_array;
     ordering_permutation(to_sort, &ordering_permutation_array, size);
 
@@ -100,8 +102,7 @@ int main(){
     int* larger;
     int* size_pointer;
     int smaller_size, larger_size;
-    size_pointer = &size;
-    partition(to_sort, size_pointer, 3, &smaller, &larger, &smaller_size, &larger_size);
+    partition(to_sort, &size, 3, &smaller, &larger, &smaller_size, &larger_size);
 
     printf("\n");
 
