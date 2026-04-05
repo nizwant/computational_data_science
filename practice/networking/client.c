@@ -6,7 +6,7 @@
 int main() {
     int sock;
     struct sockaddr_in server;
-    char *message = "Hello from client";
+    char *message = "siema babka";
 
     // 1. Create socket
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -16,8 +16,8 @@ int main() {
     }
 
     server.sin_family = AF_INET;
-    server.sin_port = htons(8080);
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_port = htons(2137);
+    server.sin_addr.s_addr = inet_addr("192.168.0.11");
 
     // 2. Connect to server
     if (connect(sock, (struct sockaddr*)&server, sizeof(server)) < 0) {

@@ -11,7 +11,7 @@ int main() {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     server.sin_family = AF_INET;
-    server.sin_port = htons(8080);
+    server.sin_port = htons(2137);
     server.sin_addr.s_addr = INADDR_ANY;
 
     bind(server_fd, (struct sockaddr*)&server, sizeof(server));
