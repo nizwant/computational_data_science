@@ -3,7 +3,13 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    if (argc != 2){
+        perror("Pass only one argument - IP address");
+        return 1;
+    }
+
     int sock;
     struct sockaddr_in server;
     char *message = "siema babka";
@@ -17,7 +23,7 @@ int main() {
 
     server.sin_family = AF_INET;
     server.sin_port = htons(2137);
-    server.sin_addr.s_addr = inet_addr("192.168.0.11");
+    server.sin_addr.s_addr = inet_addr(argv[1]);
 
     // 2. Connect to server
     if (connect(sock, (struct sockaddr*)&server, sizeof(server)) < 0) {
