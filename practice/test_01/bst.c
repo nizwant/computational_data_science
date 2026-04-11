@@ -41,7 +41,7 @@ void insert_to_tree(Node** root, int value){
         *root = new_node;
         return;
     }
-    
+
     Node* node = *root;
     Node* prev;
 
@@ -66,5 +66,16 @@ int main(){
     root_ptr = NULL;
     is_empty(root_ptr, &is_empty_val);
     printf("%d\n", is_empty_val);
+
+
+    int list[] = {1,2,4,5,3,-1,6};
+
+    for(int i=0; i<7; i++){
+        insert_to_tree(&root_ptr, list[i]);
+    }
+
+    printf("%d\n", tree_elements_number(root_ptr));
+    printf("%d\n", get_max_height(root_ptr));
+
     return 0;
 }
