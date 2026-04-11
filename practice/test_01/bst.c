@@ -10,6 +10,42 @@ void is_empty(Node* root, int* is_empty){
     *is_empty = (root == NULL);
 }
 
+int get_max_height(Node* node){
+    if(node == NULL) return 0;
+
+    int left = get_max_height(node->left);
+    int right = get_max_height(node->right);
+
+    int max = (left > right) ? left:right;
+
+    return max + 1;
+}
+
+int tree_elements_number(Node* node){
+    if(node == NULL) return 0;
+
+    int left = tree_elements_number(node->left);
+    int right = tree_elements_number(node->right);
+
+    return left + right + 1;
+}
+
+void insert_to_tree(Node* root, int value){
+    Node new_node = {value, NULL, NULL};
+    if (root == NULL) root = &new_node;
+    Node* node = root;
+    Node* prev;
+
+    while (node != NULL){
+        prev = node;
+        if (value > node->val) node = node->right;
+        else node = node ->left;
+    }
+
+    if (value > prev->val) prev->right = &new_node;
+    if (value < prev->val) prev->left = &new_node;
+}
+
 int main(){
     Node root = {1, NULL, NULL};
     Node* root_ptr = &root;
