@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct _Node {
     int val;
@@ -30,10 +31,18 @@ int tree_elements_number(Node* node){
     return left + right + 1;
 }
 
-void insert_to_tree(Node* root, int value){
-    Node new_node = {value, NULL, NULL};
-    if (root == NULL) root = &new_node;
-    Node* node = root;
+void insert_to_tree(Node** root, int value){
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->left = NULL;
+    new_node->right = NULL;
+    new_node->val = value;
+
+    if (*root == NULL) {
+        *root = new_node;
+        return;
+    }
+    
+    Node* node = *root;
     Node* prev;
 
     while (node != NULL){
@@ -42,8 +51,8 @@ void insert_to_tree(Node* root, int value){
         else node = node ->left;
     }
 
-    if (value > prev->val) prev->right = &new_node;
-    if (value < prev->val) prev->left = &new_node;
+    if (value > prev->val) prev->right = new_node;
+    if (value < prev->val) prev->left = new_node;
 }
 
 int main(){
