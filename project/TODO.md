@@ -13,3 +13,14 @@
 	- account pass
 10. Maybe it will be easier to create groups instead of 1:1 chats, or add this feature
 11. Make it secure - right now I can sniff it using wireshark
+
+## items
+
+1. initialize with client takes username, password and connects to server it can return error that the username is already taken, if not then I ping server every 10s and thats it.
+2. server listens, based on request it adds user to its db, and responds either okay or invalid
+3. then there is functionality: I want to talk with user x, they password y
+	server then validates it and responds, sends to this user start talking with person that asked
+4. From now on they start pinging each other every 10s
+5. If one of the people disconnects then the messaging is stopped and after 40s its removed from server
+6. No local database, everything is ephemeral, there are public keys stored in the central server to prevent MITM attacks but thats it
+7. It should handle around 1M users simultaneously
