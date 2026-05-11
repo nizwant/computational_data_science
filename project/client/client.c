@@ -9,25 +9,21 @@
 
 #define BUF_SZ 1024
 
-int main(int argc, char **argv) {
+typedef enum _packet_type {
+    INIT,
+    INIT_RESPONSE,
+    PING,
+    GET_PEER,
+    GET_PEER_RESPONSE,
+    START_PINGING_PEER,
+    MESSAGE
+} PacketType;
 
-    const char *peer_ip;
-    int peer_port;
 
-    if (argc == 3) {
-        peer_ip = argv[1];
-        peer_port = atoi(argv[2]);
-    }
-    else if (argc == 1)
-    {
-        peer_ip = "127.0.0.1";
-        peer_port = 2137;
-    }
-    else
-    {
-        fprintf(stderr, "usage: %s <peer_ip> <peer_port>\n or just: %s - to connect to server", argv[0], argv[0]);
-        return 1;
-    }
+int main() {
+
+    const char *peer_ip = "127.0.0.1";
+    int peer_port = 2137;
 
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
@@ -53,6 +49,12 @@ int main(int argc, char **argv) {
         close(fd);
         return 1;
     }
+
+    char initial_message [] = "hello";
+    if (sendto(fd, initial_message, strlen(initial_message), 0,
+                       (struct sockaddr *)&peer, sizeof(peer)) < 0) {
+                perror("sendto");
+            }
 
     printf("Ready.\n");
     printf("Peer: %s:%d\n", peer_ip, peer_port);
