@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <time.h>
 
 #define BUF_SZ 1024
 
@@ -102,7 +103,15 @@ int main(int argc, char **argv) {
             char src_ip[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &src.sin_addr, src_ip, sizeof(src_ip));
 
-            printf("\n[%s:%d] %s\n", src_ip, ntohs(src.sin_port), buf);
+            time_t rawtime;
+            struct tm * timeinfo;
+            char buffer[80];
+
+            time ( &rawtime );
+            timeinfo = localtime ( &rawtime );
+            strftime(buffer, sizeof(buffer), "%H:%M", timeinfo);
+
+            printf("\n[%s:%d; %s] %s\n", src_ip, ntohs(src.sin_port), buffer, buf);
             printf("> ");
             fflush(stdout);
         }
