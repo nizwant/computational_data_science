@@ -10,24 +10,14 @@
 #define BUF_SZ 1024
 
 int main(int argc, char **argv) {
-
-    const char *peer_ip;
-    int peer_port;
-
-    if (argc == 3) {
-        peer_ip = argv[1];
-        peer_port = atoi(argv[2]);
-    }
-    else if (argc == 1)
-    {
-        peer_ip = "127.0.0.1";
-        peer_port = 2137;
-    }
-    else
-    {
-        fprintf(stderr, "usage: %s <peer_ip> <peer_port>\n or just: %s - to connect to server", argv[0], argv[0]);
+    if (argc != 4) {
+        fprintf(stderr, "usage: %s <local_port> <peer_ip> <peer_port>\n", argv[0]);
         return 1;
     }
+
+    int local_port = atoi(argv[1]);
+    const char *peer_ip = argv[2];
+    int peer_port = atoi(argv[3]);
 
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
@@ -38,6 +28,7 @@ int main(int argc, char **argv) {
     struct sockaddr_in local = {0};
     local.sin_family = AF_INET;
     local.sin_addr.s_addr = htonl(INADDR_ANY);
+    local.sin_port = htons(local_port);
 
     if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
         perror("bind");
@@ -55,6 +46,7 @@ int main(int argc, char **argv) {
     }
 
     printf("Ready.\n");
+    printf("Local port: %d\n", local_port);
     printf("Peer: %s:%d\n", peer_ip, peer_port);
     printf("Type messages and press Enter.\n\n");
 
