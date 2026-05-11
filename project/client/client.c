@@ -7,7 +7,7 @@
 #include <sys/select.h>
 #include <time.h>
 
-#define BUF_SZ 1024
+#define MAX_MESS_SIZE 1024
 
 typedef enum _packet_type {
     INIT,
@@ -19,6 +19,15 @@ typedef enum _packet_type {
     MESSAGE
 } PacketType;
 
+typedef struct _packet_header{
+    uint8_t type;
+    char my_username[32];
+} PacketHeader;
+
+typedef struct _packet{
+    PacketHeader header;
+    char message[1024];
+} Packet;
 
 int main() {
 
@@ -75,7 +84,7 @@ int main() {
         }
 
         if (FD_ISSET(STDIN_FILENO, &rfds)) {
-            char buf[BUF_SZ];
+            char buf[MAX_MESS_SIZE];
             if (!fgets(buf, sizeof(buf), stdin)) {
                 break; // EOF
             }
@@ -97,7 +106,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[BUF_SZ];
+            char buf[MAX_MESS_SIZE];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
