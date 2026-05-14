@@ -1,7 +1,7 @@
 #include "../shared_patterns.h"
 
 
-int add_user(Client **clients_hashmap, char *username, struct sockaddr_in src) {
+int add_user(Client **clients_hashmap, char *username, char* password, struct sockaddr_in src) {
     Client *s;
 
     HASH_FIND_STR(*clients_hashmap, username, s);
@@ -11,6 +11,7 @@ int add_user(Client **clients_hashmap, char *username, struct sockaddr_in src) {
 
     s = malloc(sizeof *s);
     strcpy(s->username, username);
+    strcpy(s->password, password);
     s->last_time_seen = time(NULL);
     s->ip_addr = src.sin_addr;
     s->port = ntohs(src.sin_port);
@@ -61,7 +62,11 @@ int main() {
                 case INIT:
                     printf("INIT Packet received\n");
 
-                    if (add_user(&clients_hashmap, username, src) < 0){
+                    InitPacket *packet = (InitPacket *)buf;
+                    char password[32];
+                    strncpy(password, packet->password, sizeof(password) - 1);
+
+                    if (add_user(&clients_hashmap, username, password, src) < 0){
                         printf("user already exist\n"); // TODO SEND ERROR TO USER
                         break;
                     }

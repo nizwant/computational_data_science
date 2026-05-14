@@ -21,7 +21,16 @@ void print_message(const struct sockaddr_in *src, const char *message) {
     fflush(stdout);
 }
 
-int main() {
+main(int argc, char **argv) {
+    if (argc != 3) {
+        fprintf(stderr, "usage: %s <username> <password>\n", argv[0]);
+        return 1;
+    }
+
+    const char *username = argv[1];
+    const char *password = argv[2];
+
+
     int fd = setup_socket(0);
     if (fd < 0) {
         return 1;
@@ -37,8 +46,10 @@ int main() {
     }
 
     int received_init_response = 0;
-    PacketHeader header = {INIT, "nizwan"};
-    if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+    PacketHeader header = {INIT, username};
+    InitPacket init_packet = {header, password};
+
+    if (sendto(fd, &init_packet, sizeof(init_packet), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
         perror("sendto");
     }
 
@@ -74,7 +85,7 @@ int main() {
             }
 
             MessagePacket p2;
-            PacketHeader header2 = {MESSAGE, "nizwan"};
+            PacketHeader header2 = {MESSAGE, username};
             p2.header = header2;
 
             strncpy(p2.message, message, sizeof(p2.message) - 1);
