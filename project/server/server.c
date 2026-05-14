@@ -10,8 +10,8 @@ int add_user(Client **clients_hashmap, char *username, char* password, struct so
     }
 
     s = malloc(sizeof *s);
-    strcpy(s->username, username);
-    strcpy(s->password, password);
+    snprintf(s->username, sizeof(s->username), "%s", username);
+    snprintf(s->password, sizeof(s->password), "%s", password);
     s->last_time_seen = time(NULL);
     s->ip_addr = src.sin_addr;
     s->port = ntohs(src.sin_port);
@@ -55,7 +55,7 @@ int main() {
             PacketHeader *header = (PacketHeader *)buf;
             int type = header->type; 
             char username[32];
-            strcpy(username, header->sender_username);
+            snprintf(username, sizeof(username), "%s", header->sender_username);
 
             switch (type) {
                 case INIT:
@@ -64,6 +64,7 @@ int main() {
                     InitPacket *init_packet = (InitPacket *)buf;
                     char password[32];
                     strncpy(password, init_packet->password, sizeof(password) - 1);
+                    password[sizeof(password) - 1] = '\0';
 
                     if (add_user(&clients_hashmap, username, password, src) < 0){
                         printf("user already exist\n");
@@ -135,7 +136,7 @@ int main() {
                     start_packet_dest.header = start_pinging_r;
                     strncpy(start_packet_dest.username, username, sizeof(start_packet_dest.username) - 1);
                     start_packet_dest.ip = src.sin_addr;
-                    start_packet_dest.port = htons(src.sin_port);
+                    start_packet_dest.port = ntohs(src.sin_port);
                     
                     if (sendto(fd, &start_packet_dest, sizeof(start_packet_dest), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
                         perror("sendto");
