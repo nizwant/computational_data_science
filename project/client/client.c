@@ -52,8 +52,7 @@ int main() {
 
         int maxfd = (fd > STDIN_FILENO ? fd : STDIN_FILENO) + 1;
 
-        int r = select(maxfd, &rfds, NULL, NULL, NULL);
-        if (r < 0) {
+        if (select(maxfd, &rfds, NULL, NULL, NULL) < 0) {
             perror("select");
             break;
         }
