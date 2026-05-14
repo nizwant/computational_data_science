@@ -62,9 +62,9 @@ int main() {
                 case INIT:
                     printf("INIT Packet received\n");
 
-                    InitPacket *packet = (InitPacket *)buf;
+                    InitPacket *init_packet = (InitPacket *)buf;
                     char password[32];
-                    strncpy(password, packet->password, sizeof(password) - 1);
+                    strncpy(password, init_packet->password, sizeof(password) - 1);
 
                     if (add_user(&clients_hashmap, username, password, src) < 0){
                         printf("user already exist\n"); // TODO SEND ERROR TO USER
@@ -93,19 +93,35 @@ int main() {
                 case GET_PEER:
                     printf("GET_PEER Packet received\n");
 
+                    GetPeerPacket *packet = (GetPeerPacket *)buf;
+                    char dest_username[32];
+                    char password[32];
+                    strncpy(dest_username, packet->username, sizeof(dest_username) - 1);
+                    strncpy(password, packet->password, sizeof(password) - 1);
+                    
                     Client *sb;
-                    HASH_FIND_STR(clients_hashmap, "nizwan", sb); //TODO replace with fetching username from message
+                    HASH_FIND_STR(clients_hashmap, dest_username, sb);
                     if (sb == NULL) {
                         printf("GET_PEER user doesn't exist in hashmap");
                         break;
                     }
 
-                    //TODO Validate if password hash matches
+                    if (strcmp(sb->password, password) != 0){
+                        printf("Password doesn't match");
+                        break;
+                    }
 
                     // send info to requester
                     PacketHeader start_pinging_r = {START_PINGING_PEER, "server"};
-                    //TODO create struct and fill it with necessary date 
-                    if (sendto(fd, &start_pinging_r, sizeof(start_pinging_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
+
+                    // create StartPingingPeerPacket
+                    StartPingingPeerPacket start_packet_source = {0};
+                    start_packet_source.header = start_pinging_r;
+                    strncpy(start_packet_source.username, dest_username, sizeof(start_packet_source.username) - 1);
+                    start_packet_source.ip = sb->ip_addr;
+                    start_packet_source.port = sb->port;
+
+                    if (sendto(fd, &start_packet_source, sizeof(start_packet_source), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
 
@@ -116,8 +132,14 @@ int main() {
                     peer.sin_port = htons(sb->port);
                     peer.sin_addr = sb->ip_addr;
 
-                    //TODO create struct and fill it with necessary date
-                    if (sendto(fd, &start_pinging_r, sizeof(start_pinging_r), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
+                    // create StartPingingPeerPacket
+                    StartPingingPeerPacket start_packet_dest = {0};
+                    start_packet_dest.header = start_pinging_r;
+                    strncpy(start_packet_dest.username, username, sizeof(start_packet_dest.username) - 1);
+                    start_packet_dest.ip = src.sin_addr;
+                    start_packet_dest.port = src.sin_port;
+                    
+                    if (sendto(fd, &start_packet_dest, sizeof(start_packet_dest), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
                         perror("sendto");
                     }
 
