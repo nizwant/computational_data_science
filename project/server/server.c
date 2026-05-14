@@ -1,33 +1,11 @@
 #include "../shared_patterns.h"
 
-int setup_listening_socket() {
-    int fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (fd < 0) {
-        perror("socket");
-        return -1;
-    }
-
-    struct sockaddr_in local = {
-        .sin_family = AF_INET,
-        .sin_addr.s_addr = htonl(INADDR_ANY),
-        .sin_port = htons(SERVER_PORT)
-    };
-
-    if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
-        perror("bind");
-        close(fd);
-        return -1;
-    }
-
-    return fd;
-}
-
 int main() {
 
     // initialize hashmap
     Client *clients = NULL;
 
-    int fd = setup_listening_socket();
+    int fd = setup_listening_server_socket();
     if (fd < 0) {
         return 1;
     }
@@ -61,6 +39,11 @@ int main() {
             switch (header->type) {
                 case INIT:
                     printf("INIT Packet received\n");
+
+                    PacketHeader init_r = {INIT_RESPONSE, "server"};
+                    if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
+                        perror("sendto");
+                    }
                     break;
 
                 case PING:

@@ -42,3 +42,26 @@ typedef struct _client{
     char public_key[32]; // ED25519 key used as a authentication method 
     UT_hash_handle hh;
 } Client;
+
+int setup_listening_server_socket() {
+    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (fd < 0) {
+        perror("socket");
+        return -1;
+    }
+
+    struct sockaddr_in local = {
+        .sin_family = AF_INET,
+        .sin_addr.s_addr = htonl(INADDR_ANY),
+        .sin_port = htons(SERVER_PORT)
+    };
+
+    if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
+        perror("bind");
+        close(fd);
+        return -1;
+    }
+
+    return fd;
+}
+
