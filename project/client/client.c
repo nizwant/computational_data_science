@@ -27,20 +27,20 @@ int main() {
         return 1;
     }
 
-    struct sockaddr_in peer = {0};
-    peer.sin_family = AF_INET;
-    peer.sin_port = htons(SERVER_PORT);
-    if (inet_pton(AF_INET, SERVER_IP, &peer.sin_addr) != 1) {
-        fprintf(stderr, "bad peer ip\n");
+    struct sockaddr_in server = {0};
+    server.sin_family = AF_INET;
+    server.sin_port = htons(SERVER_PORT);
+    if (inet_pton(AF_INET, SERVER_IP, &server.sin_addr) != 1) {
+        fprintf(stderr, "bad server IP\n");
         close(fd);
         return 1;
     }
 
+    int received_init_response = 0;
     PacketHeader header = {INIT, "nizwan"};
-    if (sendto(fd, &header, sizeof(header), 0,
-                       (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-                perror("sendto");
-            }
+    if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+        perror("sendto");
+    }
 
     printf("Connecting to server on: %s:%d\n", SERVER_IP, SERVER_PORT);
 
@@ -82,10 +82,9 @@ int main() {
             p2.message[sizeof(p2.message) - 1] = '\0';
 
 
-            if (sendto(fd, &p2, sizeof(p2), 0,
-                            (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-                        perror("sendto");
-                    }
+            if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+                perror("sendto");
+            }
 
 
         }
@@ -107,6 +106,7 @@ int main() {
             switch (header->type) {
                 case INIT_RESPONSE:
                     printf("INIT_RESPONSE Packet received\n");
+                    received_init_response ++;
                     break;
 
                 case PING:
