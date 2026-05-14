@@ -73,8 +73,8 @@ int main() {
                 break;
             }
 
-            Packet p2;
-            PacketHeader header2 = {PING, "nizwan"};
+            MessagePacket p2;
+            PacketHeader header2 = {MESSAGE, "nizwan"};
             p2.header = header2;
 
             strncpy(p2.message, message, sizeof(p2.message) - 1);
@@ -89,7 +89,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[sizeof(Packet)];
+            char buf[sizeof(MessagePacket)];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
@@ -121,7 +121,7 @@ int main() {
                     break;
 
                 case MESSAGE:  {
-                    Packet *packet = (Packet *)buf;
+                    MessagePacket *packet = (MessagePacket *)buf;
                     char message[MAX_MESS_SIZE];
                     strncpy(message, packet->message, sizeof(message) - 1);
                     message[sizeof(message) - 1] = '\0';

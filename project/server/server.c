@@ -53,12 +53,15 @@ int main() {
             }
 
             PacketHeader *header = (PacketHeader *)buf;
+            int type = header->type; 
+            char username[32];
+            strcpy(username, header->sender_username);
 
-            switch (header->type) {
+            switch (type) {
                 case INIT:
                     printf("INIT Packet received\n");
 
-                    if (add_user(&clients_hashmap, header->sender_username, src) < 0){
+                    if (add_user(&clients_hashmap, username, src) < 0){
                         printf("user already exist\n"); // TODO SEND ERROR TO USER
                         break;
                     }
@@ -71,13 +74,11 @@ int main() {
 
                 case PING:
                     printf("PING Packet received\n");
-                    char username[32];
-                    strcpy(username, header->sender_username);
                     Client *s;
 
                     HASH_FIND_STR(clients_hashmap, username, s);
                     if (s == NULL) {
-                        printf("user doesn't exist in hashmap"); //TODO handle error
+                        printf("user that PINGed doesn't exist in hashmap");
                         break;
                     }
                     s->last_time_seen = time(NULL);
@@ -88,7 +89,7 @@ int main() {
                     break;
 
                 default:
-                    printf("Unknown packet type for server: %d\n", header->type);
+                    printf("Unknown packet type for server: %d\n", type);
                     break;
             }
         }
