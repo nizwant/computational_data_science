@@ -89,10 +89,10 @@ int main(int argc, char **argv) {
                 break;
             }
 
-            MessagePacket p2;
-            PacketHeader header2 = {MESSAGE, username};
-            p2.header = header2;
+            header.type = MESSAGE;
 
+            MessagePacket p2;
+            p2.header = header;
             strncpy(p2.message, message, sizeof(p2.message) - 1);
             p2.message[sizeof(p2.message) - 1] = '\0';
 
@@ -100,15 +100,13 @@ int main(int argc, char **argv) {
             // if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
             //     perror("sendto");
             // }
-
-
-            PacketHeader header3 = {0};
-            header3.type = GET_PEER;
-            strncpy(header3.sender_username, username, sizeof(header3.sender_username) - 1);
+            
+            //TODO remove bellow, ths just for testing
+            header.type = GET_PEER;
 
             GetPeerPacket p3;
-            p3.header = header3;
-            strncpy(p3.username, "nizwan", sizeof(p3.username) - 1);
+            p3.header = header;
+            strncpy(p3.username, "nizwan123", sizeof(p3.username) - 1);
             strncpy(p3.password, "aaab", sizeof(p3.password) - 1);
             if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
                 perror("sendto");

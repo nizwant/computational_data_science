@@ -46,8 +46,7 @@ int main() {
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
-            ssize_t n = recvfrom(fd, buf, sizeof(buf) - 1, 0,
-                                 (struct sockaddr *)&src, &slen);
+            ssize_t n = recvfrom(fd, buf, sizeof(buf) - 1, 0, (struct sockaddr *)&src, &slen);
             if (n < 0) {
                 perror("recvfrom");
                 continue;
@@ -67,12 +66,11 @@ int main() {
                     strncpy(password, init_packet->password, sizeof(password) - 1);
 
                     if (add_user(&clients_hashmap, username, password, src) < 0){
-                        printf("user already exist\n"); // TODO SEND ERROR TO USER
+                        printf("user already exist\n");
                         break;
                     }
 
                     PacketHeader init_r = {INIT_RESPONSE, "server"};
-                    //TODO create struct and fill it with necessary date
                     if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
@@ -137,7 +135,7 @@ int main() {
                     start_packet_dest.header = start_pinging_r;
                     strncpy(start_packet_dest.username, username, sizeof(start_packet_dest.username) - 1);
                     start_packet_dest.ip = src.sin_addr;
-                    start_packet_dest.port = src.sin_port;
+                    start_packet_dest.port = htons(src.sin_port);
                     
                     if (sendto(fd, &start_packet_dest, sizeof(start_packet_dest), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
                         perror("sendto");
