@@ -27,5 +27,5 @@ typedef struct _packet_header{
 
 typedef struct _packet{
     PacketHeader header;
-    char message[1024];
+    char message[MAX_MESS_SIZE];
 } Packet;

@@ -23,7 +23,6 @@ int main() {
 
 
     printf("Ready to listen.\n");
-    printf("Local port: %d\n", local_port);
 
     for (;;) {
         fd_set rfds;
@@ -40,7 +39,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[MAX_MESS_SIZE];
+            char buf[sizeof(Packet)];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
@@ -59,7 +58,7 @@ int main() {
                     break;
                 case MESSAGE:  {
                     Packet *pkt = (Packet*)buf;
-                    char message[1024];
+                    char message[MAX_MESS_SIZE];
                     strncpy(message, pkt->message, sizeof(message) - 1);
                     message[sizeof(message) - 1] = '\0';
 

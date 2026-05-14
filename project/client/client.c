@@ -36,13 +36,6 @@ int main() {
                 perror("sendto");
             }
 
-    PacketHeader header2 = {MESSAGE, "nizwan"};
-    Packet p = {header2, "aaaaaaab"};
-    if (sendto(fd, &p, sizeof(p), 0,
-                       (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-                perror("sendto");
-            }
-
     printf("Ready.\n");
     printf("Peer: %s:%d\n", peer_ip, peer_port);
     printf("Type messages and press Enter.\n\n");
@@ -78,6 +71,7 @@ int main() {
             }
 
             Packet p2;
+            PacketHeader header2 = {MESSAGE, "nizwan"};
             p2.header = header2;
 
             strncpy(p2.message, message, sizeof(p2.message) - 1);
