@@ -1,9 +1,6 @@
 #include "../shared_patterns.h"
 
-#define LOCAL_PORT 2137
-
-
-int setup_socket() {
+int setup_listening_socket() {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         perror("socket");
@@ -13,7 +10,7 @@ int setup_socket() {
     struct sockaddr_in local = {
         .sin_family = AF_INET,
         .sin_addr.s_addr = htonl(INADDR_ANY),
-        .sin_port = htons(LOCAL_PORT)
+        .sin_port = htons(SERVER_PORT)
     };
 
     if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
@@ -27,12 +24,15 @@ int setup_socket() {
 
 int main() {
 
-    int fd = setup_socket();
+    // initialize hashmap
+    Client *clients = NULL;
+
+    int fd = setup_listening_socket();
     if (fd < 0) {
         return 1;
     }
 
-    printf("Listening on UDP port %d...\n", LOCAL_PORT);
+    printf("Listening on UDP port %d...\n", SERVER_PORT);
 
     while (1) {
         fd_set rfds;

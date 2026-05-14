@@ -22,10 +22,6 @@ void print_message(const struct sockaddr_in *src, const char *message) {
 }
 
 int main() {
-
-    const char *peer_ip = "127.0.0.1";
-    int peer_port = 2137;
-
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         perror("socket");
@@ -44,8 +40,8 @@ int main() {
 
     struct sockaddr_in peer = {0};
     peer.sin_family = AF_INET;
-    peer.sin_port = htons(peer_port);
-    if (inet_pton(AF_INET, peer_ip, &peer.sin_addr) != 1) {
+    peer.sin_port = htons(SERVER_PORT);
+    if (inet_pton(AF_INET, SERVER_IP, &peer.sin_addr) != 1) {
         fprintf(stderr, "bad peer ip\n");
         close(fd);
         return 1;
@@ -57,9 +53,7 @@ int main() {
                 perror("sendto");
             }
 
-    printf("Ready.\n");
-    printf("Peer: %s:%d\n", peer_ip, peer_port);
-    printf("Type messages and press Enter.\n\n");
+    printf("Connecting to server on: %s:%d\n", SERVER_IP, SERVER_PORT);
 
     for (;;) {
         fd_set rfds;
