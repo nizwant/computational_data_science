@@ -74,7 +74,7 @@ int main() {
             }
 
             Packet p2;
-            PacketHeader header2 = {MESSAGE, "nizwan"};
+            PacketHeader header2 = {PING, "nizwan"};
             p2.header = header2;
 
             strncpy(p2.message, message, sizeof(p2.message) - 1);
