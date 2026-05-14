@@ -2,28 +2,6 @@
 
 #define LOCAL_PORT 2137
 
-void print_message(const struct sockaddr_in *src, const char *message) {
-    char ip[INET_ADDRSTRLEN];
-    char time_str[16];
-
-    // metadata creation
-    inet_ntop(AF_INET, &src->sin_addr, ip, sizeof(ip));
-
-    time_t now = time(NULL);
-    struct tm *tm_info = localtime(&now);
-
-    strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
-
-    printf("[%s:%d; %s] %s\n",
-           ip,
-           ntohs(src->sin_port),
-           time_str,
-           message);
-
-    fflush(stdout);
-}
-
-
 
 int setup_socket() {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -67,7 +45,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[sizeof(Packet)];
+            char buf[sizeof(PacketHeader)];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
@@ -84,17 +62,17 @@ int main() {
                 case INIT:
                     printf("INIT Packet received\n");
                     break;
-                case MESSAGE:  {
-                    Packet *packet = (Packet *)buf;
-                    char message[MAX_MESS_SIZE];
-                    strncpy(message, packet->message, sizeof(message) - 1);
-                    message[sizeof(message) - 1] = '\0';
 
-                    print_message(&src, message);
+                case PING:
+                    printf("PING Packet received\n");
                     break;
-                }
+
+                case GET_PEER:
+                    printf("GET_PEER Packet received\n");
+                    break;
+
                 default:
-                    printf("Unknown packet type: %d\n", header->type);
+                    printf("Unknown packet type for server: %d\n", header->type);
                     break;
             }
         }

@@ -1,5 +1,26 @@
 #include "../shared_patterns.h"
 
+void print_message(const struct sockaddr_in *src, const char *message) {
+    char ip[INET_ADDRSTRLEN];
+    char time_str[16];
+
+    // metadata creation
+    inet_ntop(AF_INET, &src->sin_addr, ip, sizeof(ip));
+
+    time_t now = time(NULL);
+    struct tm *tm_info = localtime(&now);
+
+    strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
+
+    printf("[%s:%d; %s] %s\n",
+           ip,
+           ntohs(src->sin_port),
+           time_str,
+           message);
+
+    fflush(stdout);
+}
+
 int main() {
 
     const char *peer_ip = "127.0.0.1";
@@ -87,7 +108,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[MAX_MESS_SIZE];
+            char buf[sizeof(Packet)];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
@@ -98,22 +119,38 @@ int main() {
                 continue;
             }
 
-            buf[n] = '\0';
+            PacketHeader *header = (PacketHeader *)buf;
 
-            char src_ip[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &src.sin_addr, src_ip, sizeof(src_ip));
+            switch (header->type) {
+                case INIT_RESPONSE:
+                    printf("INIT_RESPONSE Packet received\n");
+                    break;
 
-            time_t rawtime;
-            struct tm * timeinfo;
-            char buffer[80];
+                case PING:
+                    printf("PING Packet received\n");
+                    break;
 
-            time ( &rawtime );
-            timeinfo = localtime ( &rawtime );
-            strftime(buffer, sizeof(buffer), "%H:%M", timeinfo);
+                case GET_PEER_RESPONSE:
+                    printf("GET_PEER_RESPONSE Packet received\n");
+                    break;
 
-            printf("\n[%s:%d; %s] %s\n", src_ip, ntohs(src.sin_port), buffer, buf);
-            printf("> ");
-            fflush(stdout);
+                case START_PINGING_PEER:
+                    printf("START_PINGING_PEER Packet received\n");
+                    break;
+
+                case MESSAGE:  {
+                    Packet *packet = (Packet *)buf;
+                    char message[MAX_MESS_SIZE];
+                    strncpy(message, packet->message, sizeof(message) - 1);
+                    message[sizeof(message) - 1] = '\0';
+
+                    print_message(&src, message);
+                    break;
+                }
+                default:
+                    printf("Unknown packet type for client: %d\n", header->type);
+                    break;
+            }
         }
 
         printf("> ");
