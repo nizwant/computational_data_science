@@ -2,12 +2,34 @@
 
 #define LOCAL_PORT 2137
 
+void print_message(const struct sockaddr_in *src, const char *message) {
+    char ip[INET_ADDRSTRLEN];
+    char time_str[16];
+
+    // metadata creation
+    inet_ntop(AF_INET, &src->sin_addr, ip, sizeof(ip));
+
+    time_t now = time(NULL);
+    struct tm *tm_info = localtime(&now);
+
+    strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
+
+    printf("[%s:%d; %s] %s\n",
+           ip,
+           ntohs(src->sin_port),
+           time_str,
+           message);
+
+    fflush(stdout);
+}
+
+
 
 int setup_socket() {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         perror("socket");
-        return 1;
+        return -1;
     }
 
     struct sockaddr_in local = {
@@ -19,7 +41,7 @@ int setup_socket() {
     if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
         perror("bind");
         close(fd);
-        return 1;
+        return -1;
     }
 
     return fd;
@@ -34,16 +56,12 @@ int main() {
 
     printf("Listening on UDP port %d...\n", LOCAL_PORT);
 
-    for (;;) {
+    while (1) {
         fd_set rfds;
         FD_ZERO(&rfds);
         FD_SET(fd, &rfds);
-        FD_SET(STDIN_FILENO, &rfds);
 
-        int maxfd = (fd > STDIN_FILENO ? fd : STDIN_FILENO) + 1;
-
-        int r = select(maxfd, &rfds, NULL, NULL, NULL);
-        if (r < 0) {
+        if (select(fd + 1, &rfds, NULL, NULL, NULL) < 0) {
             perror("select");
             break;
         }
@@ -60,32 +78,19 @@ int main() {
                 continue;
             }
 
-            PacketHeader *header = (PacketHeader*)buf;
+            PacketHeader *header = (PacketHeader *)buf;
 
             switch (header->type) {
                 case INIT:
-                    printf("type 1 received\n");
+                    printf("INIT Packet received\n");
                     break;
                 case MESSAGE:  {
-                    Packet *pkt = (Packet*)buf;
+                    Packet *packet = (Packet *)buf;
                     char message[MAX_MESS_SIZE];
-                    strncpy(message, pkt->message, sizeof(message) - 1);
+                    strncpy(message, packet->message, sizeof(message) - 1);
                     message[sizeof(message) - 1] = '\0';
 
-                    // metadata creation
-                    char src_ip[INET_ADDRSTRLEN];
-                    inet_ntop(AF_INET, &src.sin_addr, src_ip, sizeof(src_ip));
-
-                    time_t rawtime;
-                    struct tm * timeinfo;
-                    char time_buffer[80];
-
-                    time ( &rawtime );
-                    timeinfo = localtime ( &rawtime );
-                    strftime(time_buffer, sizeof(time_buffer), "%H:%M", timeinfo);
-
-                    printf("[%s:%d; %s] %s\n", src_ip, ntohs(src.sin_port), time_buffer, message);
-                    fflush(stdout);
+                    print_message(&src, message);
                     break;
                 }
                 default:
