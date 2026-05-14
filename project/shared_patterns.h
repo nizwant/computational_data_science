@@ -43,7 +43,7 @@ typedef struct _client{
     UT_hash_handle hh;
 } Client;
 
-int setup_listening_server_socket() {
+int setup_socket(int server_socket) {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         perror("socket");
@@ -52,9 +52,12 @@ int setup_listening_server_socket() {
 
     struct sockaddr_in local = {
         .sin_family = AF_INET,
-        .sin_addr.s_addr = htonl(INADDR_ANY),
-        .sin_port = htons(SERVER_PORT)
+        .sin_addr.s_addr = htonl(INADDR_ANY)
     };
+
+    if (server_socket){
+        local.sin_port = htons(SERVER_PORT);
+    }
 
     if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
         perror("bind");

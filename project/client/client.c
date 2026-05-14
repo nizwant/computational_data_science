@@ -22,19 +22,8 @@ void print_message(const struct sockaddr_in *src, const char *message) {
 }
 
 int main() {
-    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int fd = setup_socket(0);
     if (fd < 0) {
-        perror("socket");
-        return 1;
-    }
-
-    struct sockaddr_in local = {0};
-    local.sin_family = AF_INET;
-    local.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
-        perror("bind");
-        close(fd);
         return 1;
     }
 

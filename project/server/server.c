@@ -5,7 +5,7 @@ int main() {
     // initialize hashmap
     Client *clients = NULL;
 
-    int fd = setup_listening_server_socket();
+    int fd = setup_socket(1);
     if (fd < 0) {
         return 1;
     }
