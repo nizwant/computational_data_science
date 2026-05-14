@@ -67,6 +67,7 @@ int main() {
                     }
 
                     PacketHeader init_r = {INIT_RESPONSE, "server"};
+                    //TODO create struct and fill it with necessary date
                     if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
@@ -86,6 +87,36 @@ int main() {
 
                 case GET_PEER:
                     printf("GET_PEER Packet received\n");
+
+                    Client *sb;
+                    HASH_FIND_STR(clients_hashmap, "nizwan", sb); //TODO replace with fetching username from message
+                    if (sb == NULL) {
+                        printf("GET_PEER user doesn't exist in hashmap");
+                        break;
+                    }
+
+                    //TODO Validate if password hash matches
+
+                    // send info to requester
+                    PacketHeader get_peer_r = {GET_PEER_RESPONSE, "server"};
+                    //TODO create struct and fill it with necessary date 
+                    if (sendto(fd, &get_peer_r, sizeof(get_peer_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
+                        perror("sendto");
+                    }
+
+                    // send START_PINGING_PEER to requested
+
+                    struct sockaddr_in peer = {0};
+                    peer.sin_family = AF_INET;
+                    peer.sin_port = htons(sb->port);
+                    peer.sin_addr = sb->ip_addr;
+
+                    PacketHeader start_pinging_r = {START_PINGING_PEER, "server"};
+                    //TODO create struct and fill it with necessary date
+                    if (sendto(fd, &start_pinging_r, sizeof(start_pinging_r), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
+                        perror("sendto");
+                    }
+
                     break;
 
                 default:

@@ -28,7 +28,7 @@ typedef struct _packet_header{
     char sender_username[32];
 } PacketHeader;
 
-typedef struct _packet{
+typedef struct _message_packet{
     PacketHeader header;
     char message[MAX_MESS_SIZE];
 } MessagePacket;
