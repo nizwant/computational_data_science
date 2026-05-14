@@ -84,7 +84,7 @@ int main() {
 
                     HASH_FIND_STR(clients_hashmap, username, s);
                     if (s == NULL) {
-                        printf("user that PINGed doesn't exist in hashmap");
+                        printf("user that PINGed doesn't exist in hashmap\n");
                         break;
                     }
                     s->last_time_seen = time(NULL);
@@ -102,12 +102,12 @@ int main() {
                     Client *sb;
                     HASH_FIND_STR(clients_hashmap, dest_username, sb);
                     if (sb == NULL) {
-                        printf("GET_PEER user doesn't exist in hashmap");
+                        printf("GET_PEER user doesn't exist in hashmap\n");
                         break;
                     }
 
                     if (strcmp(sb->password, dest_password) != 0){
-                        printf("Password doesn't match");
+                        printf("Password doesn't match\n");
                         break;
                     }
 

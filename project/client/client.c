@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
             GetPeerPacket p3;
             p3.header = header3;
             strncpy(p3.username, "nizwan", sizeof(p3.username) - 1);
-            strncpy(p3.password, "aaa", sizeof(p3.password) - 1);
+            strncpy(p3.password, "aaab", sizeof(p3.password) - 1);
             if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
                 perror("sendto");
             }
@@ -142,6 +142,11 @@ int main(int argc, char **argv) {
 
                 case START_PINGING_PEER:
                     printf("START_PINGING_PEER Packet received\n");
+                    
+                    StartPingingPeerPacket *spp_packet = (StartPingingPeerPacket *)buf;
+                    printf("Username: %s\n", spp_packet->username);
+                    printf("Port: %d\n", spp_packet->port);
+
                     break;
 
                 case MESSAGE:  {
