@@ -21,7 +21,7 @@ void print_message(const struct sockaddr_in *src, const char *message) {
     fflush(stdout);
 }
 
-main(int argc, char **argv) {
+int main(int argc, char **argv) {
     if (argc != 3) {
         fprintf(stderr, "usage: %s <username> <password>\n", argv[0]);
         return 1;
@@ -46,8 +46,13 @@ main(int argc, char **argv) {
     }
 
     int received_init_response = 0;
-    PacketHeader header = {INIT, username};
-    InitPacket init_packet = {header, password};
+    PacketHeader header = {0};
+    header.type = INIT;
+    strncpy(header.sender_username, username, sizeof(header.sender_username) - 1);
+
+    InitPacket init_packet = {0};
+    init_packet.header = header;
+    strncpy(init_packet.password, password, sizeof(init_packet.password) - 1);
 
     if (sendto(fd, &init_packet, sizeof(init_packet), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
         perror("sendto");
@@ -92,10 +97,22 @@ main(int argc, char **argv) {
             p2.message[sizeof(p2.message) - 1] = '\0';
 
 
-            if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+            // if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+            //     perror("sendto");
+            // }
+
+
+            PacketHeader header3 = {0};
+            header3.type = GET_PEER;
+            strncpy(header3.sender_username, username, sizeof(header3.sender_username) - 1);
+
+            GetPeerPacket p3;
+            p3.header = header3;
+            strncpy(p3.username, "nizwan", sizeof(p3.username) - 1);
+            strncpy(p3.password, "aaa", sizeof(p3.password) - 1);
+            if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
                 perror("sendto");
             }
-
 
         }
 

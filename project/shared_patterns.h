@@ -46,9 +46,9 @@ typedef struct _start_pinging_peer_packet{
 } StartPingingPeerPacket;
 
 typedef union _metadata_packet{
-    InitPacket;
-    GetPeerPacket;
-    StartPingingPeerPacket;
+    InitPacket init;
+    GetPeerPacket get_peer;
+    StartPingingPeerPacket start_pinging_peer;
 } MetadataPacket;
 
 

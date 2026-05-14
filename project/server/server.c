@@ -95,9 +95,9 @@ int main() {
 
                     GetPeerPacket *packet = (GetPeerPacket *)buf;
                     char dest_username[32];
-                    char password[32];
+                    char dest_password[32];
                     strncpy(dest_username, packet->username, sizeof(dest_username) - 1);
-                    strncpy(password, packet->password, sizeof(password) - 1);
+                    strncpy(dest_password, packet->password, sizeof(dest_password) - 1);
                     
                     Client *sb;
                     HASH_FIND_STR(clients_hashmap, dest_username, sb);
@@ -106,7 +106,7 @@ int main() {
                         break;
                     }
 
-                    if (strcmp(sb->password, password) != 0){
+                    if (strcmp(sb->password, dest_password) != 0){
                         printf("Password doesn't match");
                         break;
                     }
