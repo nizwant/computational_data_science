@@ -1,9 +1,27 @@
 #include "../shared_patterns.h"
 
+
+int add_user(Client **clients_hashmap, char *username, struct sockaddr_in src) {
+    Client *s;
+
+    HASH_FIND_STR(*clients_hashmap, username, s);
+    if (s != NULL) {
+      return -1;
+    }
+
+    s = malloc(sizeof *s);
+    strcpy(s->username, username);
+    s->last_time_seen = time(NULL);
+    s->ip_addr = src.sin_addr;
+    s->port = ntohs(src.sin_port);
+    HASH_ADD_STR(*clients_hashmap, username, s); 
+    return 1;
+}
+
 int main() {
 
     // initialize hashmap
-    Client *clients = NULL;
+    Client *clients_hashmap = NULL;
 
     int fd = setup_socket(1);
     if (fd < 0) {
@@ -39,6 +57,11 @@ int main() {
             switch (header->type) {
                 case INIT:
                     printf("INIT Packet received\n");
+
+                    if (add_user(&clients_hashmap, header->sender_username, src) < 0){
+                        printf("user already exist\n"); // TODO SEND ERROR TO USER
+                        break;
+                    }
 
                     PacketHeader init_r = {INIT_RESPONSE, "server"};
                     if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
