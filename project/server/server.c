@@ -85,33 +85,31 @@ int main() {
 
             switch (hdr->type) {
                 case INIT:
-                    printf("type 1 received");
+                    printf("type 1 received\n");
                     break;
                 case MESSAGE:  {
                     Packet *pkt = (Packet*)buf;
                     char message[1024];
                     strncpy(message, pkt->message, sizeof(message) - 1);
                     message[sizeof(message) - 1] = '\0';
-                    printf("%s", message);
+
+                    // metadata creation
+                    char src_ip[INET_ADDRSTRLEN];
+                    inet_ntop(AF_INET, &src.sin_addr, src_ip, sizeof(src_ip));
+
+                    time_t rawtime;
+                    struct tm * timeinfo;
+                    char time_buffer[80];
+
+                    time ( &rawtime );
+                    timeinfo = localtime ( &rawtime );
+                    strftime(time_buffer, sizeof(time_buffer), "%H:%M", timeinfo);
+
+                    printf("[%s:%d; %s] %s\n", src_ip, ntohs(src.sin_port), time_buffer, message);
+                    fflush(stdout);
                     break;
                 }
             }
-
-            buf[n] = '\0';
-
-            char src_ip[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &src.sin_addr, src_ip, sizeof(src_ip));
-
-            time_t rawtime;
-            struct tm * timeinfo;
-            char time_buffer[80];
-
-            time ( &rawtime );
-            timeinfo = localtime ( &rawtime );
-            strftime(time_buffer, sizeof(time_buffer), "%H:%M", timeinfo);
-
-            printf("[%s:%d; %s] %s\n", src_ip, ntohs(src.sin_port), time_buffer, buf);
-            fflush(stdout);
         }
 
         fflush(stdout);

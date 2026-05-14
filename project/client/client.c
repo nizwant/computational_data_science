@@ -91,25 +91,34 @@ int main() {
         }
 
         if (FD_ISSET(STDIN_FILENO, &rfds)) {
-            char buf[MAX_MESS_SIZE];
-            if (!fgets(buf, sizeof(buf), stdin)) {
+            char message[MAX_MESS_SIZE];
+            if (!fgets(message, sizeof(message), stdin)) {
                 break; // EOF
             }
 
-            size_t len = strlen(buf);
-            if (len > 0 && buf[len - 1] == '\n') {
-                buf[len - 1] = '\0';
+            size_t len = strlen(message);
+            if (len > 0 && message[len - 1] == '\n') {
+                message[len - 1] = '\0';
                 len--;
             }
 
-            if (strcmp(buf, "/quit") == 0) {
+            if (strcmp(message, "/quit") == 0) {
                 break;
             }
 
-            if (sendto(fd, buf, len, 0,
-                       (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-                perror("sendto");
-            }
+            Packet p2;
+            p2.header = header2;
+
+            strncpy(p2.message, message, sizeof(p2.message) - 1);
+            p2.message[sizeof(p2.message) - 1] = '\0';
+
+
+            if (sendto(fd, &p2, sizeof(p2), 0,
+                            (struct sockaddr *)&peer, sizeof(peer)) < 0) {
+                        perror("sendto");
+                    }
+
+
         }
 
         if (FD_ISSET(fd, &rfds)) {
