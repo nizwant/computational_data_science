@@ -18,15 +18,39 @@ typedef enum _packet_type {
     INIT_RESPONSE,
     PING,
     GET_PEER,
-    GET_PEER_RESPONSE,
     START_PINGING_PEER,
     MESSAGE
 } PacketType;
 
 typedef struct _packet_header{
-    PacketType type;
+    u_int8_t type;
     char sender_username[32];
 } PacketHeader;
+
+typedef struct _init_packet{
+    PacketHeader header;
+    char password[32];
+} InitPacket;
+
+typedef struct _get_peer_packet{
+    PacketHeader header;
+    char username[32];
+    char password[32];
+} GetPeerPacket;
+
+typedef struct _start_pinging_peer_packet{
+    PacketHeader header;
+    char username[32];
+    struct in_addr ip;
+    uint16_t port;
+} StartPingingPeerPacket;
+
+typedef union _metadata_packet{
+    InitPacket;
+    GetPeerPacket;
+    StartPingingPeerPacket;
+} MetadataPacket;
+
 
 typedef struct _message_packet{
     PacketHeader header;

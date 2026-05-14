@@ -41,7 +41,7 @@ int main() {
         }
 
         if (FD_ISSET(fd, &rfds)) {
-            char buf[sizeof(PacketHeader)];
+            char buf[sizeof(MetadataPacket)];
             struct sockaddr_in src;
             socklen_t slen = sizeof(src);
 
@@ -98,9 +98,9 @@ int main() {
                     //TODO Validate if password hash matches
 
                     // send info to requester
-                    PacketHeader get_peer_r = {GET_PEER_RESPONSE, "server"};
+                    PacketHeader start_pinging_r = {START_PINGING_PEER, "server"};
                     //TODO create struct and fill it with necessary date 
-                    if (sendto(fd, &get_peer_r, sizeof(get_peer_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
+                    if (sendto(fd, &start_pinging_r, sizeof(start_pinging_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
 
@@ -111,7 +111,6 @@ int main() {
                     peer.sin_port = htons(sb->port);
                     peer.sin_addr = sb->ip_addr;
 
-                    PacketHeader start_pinging_r = {START_PINGING_PEER, "server"};
                     //TODO create struct and fill it with necessary date
                     if (sendto(fd, &start_pinging_r, sizeof(start_pinging_r), 0, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
                         perror("sendto");

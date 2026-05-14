@@ -112,10 +112,6 @@ int main() {
                     printf("PING Packet received\n");
                     break;
 
-                case GET_PEER_RESPONSE:
-                    printf("GET_PEER_RESPONSE Packet received\n");
-                    break;
-
                 case START_PINGING_PEER:
                     printf("START_PINGING_PEER Packet received\n");
                     break;
