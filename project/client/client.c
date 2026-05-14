@@ -20,7 +20,7 @@ typedef enum _packet_type {
 } PacketType;
 
 typedef struct _packet_header{
-    uint8_t type;
+    PacketType type;
     char my_username[32];
 } PacketHeader;
 
@@ -59,8 +59,15 @@ int main() {
         return 1;
     }
 
-    char initial_message [] = "hello";
-    if (sendto(fd, initial_message, strlen(initial_message), 0,
+    PacketHeader header = {INIT, "nizwan"};
+    if (sendto(fd, &header, sizeof(header), 0,
+                       (struct sockaddr *)&peer, sizeof(peer)) < 0) {
+                perror("sendto");
+            }
+
+    PacketHeader header2 = {MESSAGE, "nizwan"};
+    Packet p = {header2, "aaaaaaab"};
+    if (sendto(fd, &p, sizeof(p), 0,
                        (struct sockaddr *)&peer, sizeof(peer)) < 0) {
                 perror("sendto");
             }
