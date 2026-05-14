@@ -1,19 +1,20 @@
 #include "../shared_patterns.h"
 
-int main() {
+#define LOCAL_PORT 2137
 
-    int local_port = 2137;
 
+int setup_socket() {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0) {
         perror("socket");
         return 1;
     }
 
-    struct sockaddr_in local = {0};
-    local.sin_family = AF_INET;
-    local.sin_addr.s_addr = htonl(INADDR_ANY);
-    local.sin_port = htons(local_port);
+    struct sockaddr_in local = {
+        .sin_family = AF_INET,
+        .sin_addr.s_addr = htonl(INADDR_ANY),
+        .sin_port = htons(LOCAL_PORT)
+    };
 
     if (bind(fd, (struct sockaddr *)&local, sizeof(local)) < 0) {
         perror("bind");
@@ -21,8 +22,17 @@ int main() {
         return 1;
     }
 
+    return fd;
+}
 
-    printf("Ready to listen.\n");
+int main() {
+
+    int fd = setup_socket();
+    if (fd < 0) {
+        return 1;
+    }
+
+    printf("Listening on UDP port %d...\n", LOCAL_PORT);
 
     for (;;) {
         fd_set rfds;
@@ -50,9 +60,9 @@ int main() {
                 continue;
             }
 
-            PacketHeader *hdr = (PacketHeader*)buf;
+            PacketHeader *header = (PacketHeader*)buf;
 
-            switch (hdr->type) {
+            switch (header->type) {
                 case INIT:
                     printf("type 1 received\n");
                     break;
@@ -78,10 +88,12 @@ int main() {
                     fflush(stdout);
                     break;
                 }
+                default:
+                    printf("Unknown packet type: %d\n", header->type);
+                    break;
             }
         }
 
-        fflush(stdout);
     }
 
     close(fd);
