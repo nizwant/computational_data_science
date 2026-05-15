@@ -95,9 +95,6 @@ int main(int argc, char **argv) {
 
                 if (sscanf(message, "/get_user %31s %31s", get_username, get_password) == 2) {
                     // success
-                    printf("username: %s\n", get_username);
-                    printf("password: %s\n", get_password);
-
                     header.type = GET_PEER;
 
                     GetPeerPacket p3;
@@ -112,20 +109,37 @@ int main(int argc, char **argv) {
                     printf("bad format, expected format: /get_user username password\n");
                 }
             }
+            else if (strncmp(message, "/message", 8) == 0){
 
-            
-            
+                char message_username[32];
 
-            header.type = MESSAGE;
+                if (sscanf(message, "/get_user %31s ", message_username) == 1) {
+                    // success
+                    header.type = MESSAGE;
 
-            MessagePacket p2;
-            p2.header = header;
-            strncpy(p2.message, message, sizeof(p2.message) - 1);
-            p2.message[sizeof(p2.message) - 1] = '\0';
+                    MessagePacket p2;
+                    p2.header = header;
+                    strncpy(p2.message, message, sizeof(p2.message) - 1);
+                    p2.message[sizeof(p2.message) - 1] = '\0';
 
-            if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
-                perror("sendto");
+                    if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+                        perror("sendto");
+                    }
+                }
+                else{
+                    printf("bad format, expected format: /message username\n");
+                }
             }
+
+            else if (strncmp(message, "/ping", 5) == 0){
+                header.type = PING;
+            }
+
+            else
+            {
+                printf("bad format expected one of those:\n - /quit\n - /get_user username password\n - /ping username\n - /message username");
+            }
+            
         }
 
         if (FD_ISSET(fd, &rfds)) {
