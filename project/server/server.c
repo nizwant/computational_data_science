@@ -23,7 +23,6 @@ int main() {
 
     // initialize hashmap
     Client *clients_hashmap = NULL;
-    char server_username[32] = "server";
 
     // add server to hashmap
 
@@ -33,7 +32,7 @@ int main() {
         .sin_port = htons(SERVER_PORT)
     };
 
-    add_user_to_hashmap(&clients_hashmap, server_username, "very_hard_password", server_socket);
+    add_user_to_hashmap(&clients_hashmap, SERVER_USERNAME, "very_hard_password", server_socket);
 
     int fd = setup_socket(1);
     if (fd < 0) {
@@ -82,7 +81,7 @@ int main() {
                         break;
                     }
 
-                    PacketHeader init_r = {INIT_RESPONSE, server_username};
+                    PacketHeader init_r = {INIT_RESPONSE, SERVER_USERNAME};
                     if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
@@ -122,7 +121,7 @@ int main() {
                     }
 
                     // send info to requester
-                    PacketHeader start_pinging_r = {START_PINGING_PEER, server_username};
+                    PacketHeader start_pinging_r = {START_PINGING_PEER, SERVER_USERNAME};
 
                     // create StartPingingPeerPacket
                     StartPingingPeerPacket start_packet_source = {0};

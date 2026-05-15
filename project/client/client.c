@@ -88,6 +88,33 @@ int main(int argc, char **argv) {
             if (strcmp(message, "/quit") == 0) {
                 break;
             }
+            else if (strncmp(message, "/get_user", 9) == 0)
+            {
+                char get_username[32];
+                char get_password[32];
+
+                if (sscanf(message, "/get_user %31s %31s", get_username, get_password) == 2) {
+                    // success
+                    printf("username: %s\n", get_username);
+                    printf("password: %s\n", get_password);
+
+                    header.type = GET_PEER;
+
+                    GetPeerPacket p3;
+                    p3.header = header;
+                    strncpy(p3.username, get_username, sizeof(p3.username) - 1);
+                    strncpy(p3.password, get_password, sizeof(p3.password) - 1);
+                    if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+                        perror("sendto");
+                    }
+                }
+                else{
+                    printf("bad format, expected format: /get_user username password\n");
+                }
+            }
+
+            
+            
 
             header.type = MESSAGE;
 
@@ -96,22 +123,9 @@ int main(int argc, char **argv) {
             strncpy(p2.message, message, sizeof(p2.message) - 1);
             p2.message[sizeof(p2.message) - 1] = '\0';
 
-
-            // if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
-            //     perror("sendto");
-            // }
-            
-            //TODO remove bellow, ths just for testing
-            header.type = GET_PEER;
-
-            GetPeerPacket p3;
-            p3.header = header;
-            strncpy(p3.username, "nizwan123", sizeof(p3.username) - 1);
-            strncpy(p3.password, "aaab", sizeof(p3.password) - 1);
-            if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
+            if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
                 perror("sendto");
             }
-
         }
 
         if (FD_ISSET(fd, &rfds)) {
