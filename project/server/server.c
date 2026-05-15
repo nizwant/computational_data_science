@@ -1,7 +1,7 @@
 #include "../shared_patterns.h"
 
 
-int add_user(Client **clients_hashmap, char *username, char* password, struct sockaddr_in src) {
+int add_user_to_hashmap(Client **clients_hashmap, char *username, char* password, struct sockaddr_in src) {
     Client *s;
 
     HASH_FIND_STR(*clients_hashmap, username, s);
@@ -23,6 +23,17 @@ int main() {
 
     // initialize hashmap
     Client *clients_hashmap = NULL;
+    char server_username[32] = "server";
+
+    // add server to hashmap
+
+    struct sockaddr_in server_socket = {
+        .sin_family = AF_INET,
+        .sin_addr.s_addr = htonl(INADDR_ANY),
+        .sin_port = htons(SERVER_PORT)
+    };
+
+    add_user_to_hashmap(&clients_hashmap, server_username, "very_hard_password", server_socket);
 
     int fd = setup_socket(1);
     if (fd < 0) {
@@ -66,12 +77,12 @@ int main() {
                     strncpy(password, init_packet->password, sizeof(password) - 1);
                     password[sizeof(password) - 1] = '\0';
 
-                    if (add_user(&clients_hashmap, username, password, src) < 0){
+                    if (add_user_to_hashmap(&clients_hashmap, username, password, src) < 0){
                         printf("user already exist\n");
                         break;
                     }
 
-                    PacketHeader init_r = {INIT_RESPONSE, "server"};
+                    PacketHeader init_r = {INIT_RESPONSE, server_username};
                     if (sendto(fd, &init_r, sizeof(init_r), 0, (struct sockaddr *)&src, sizeof(src)) < 0) {
                         perror("sendto");
                     }
@@ -111,7 +122,7 @@ int main() {
                     }
 
                     // send info to requester
-                    PacketHeader start_pinging_r = {START_PINGING_PEER, "server"};
+                    PacketHeader start_pinging_r = {START_PINGING_PEER, server_username};
 
                     // create StartPingingPeerPacket
                     StartPingingPeerPacket start_packet_source = {0};
