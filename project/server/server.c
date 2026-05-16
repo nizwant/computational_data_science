@@ -1,24 +1,5 @@
 #include "../shared_patterns.h"
 
-
-int add_user_to_hashmap(Client **clients_hashmap, char *username, char* password, struct sockaddr_in src) {
-    Client *s;
-
-    HASH_FIND_STR(*clients_hashmap, username, s);
-    if (s != NULL) {
-      return -1;
-    }
-
-    s = malloc(sizeof *s);
-    snprintf(s->username, sizeof(s->username), "%s", username);
-    snprintf(s->password, sizeof(s->password), "%s", password);
-    s->last_time_seen = time(NULL);
-    s->ip_addr = src.sin_addr;
-    s->port = ntohs(src.sin_port);
-    HASH_ADD_STR(*clients_hashmap, username, s); 
-    return 1;
-}
-
 int main() {
 
     // initialize hashmap

@@ -30,6 +30,17 @@ int main(int argc, char **argv) {
     const char *username = argv[1];
     const char *password = argv[2];
 
+    // initialize hashmap
+    Client *clients_hashmap = NULL;
+
+    // add server to hashmap
+
+    struct sockaddr_in client_dummy_socket = {
+        .sin_family = AF_INET,
+        .sin_addr.s_addr = htonl(INADDR_ANY)
+    };
+
+    add_user_to_hashmap(&clients_hashmap, username, password, client_dummy_socket);
 
     int fd = setup_socket(0);
     if (fd < 0) {
