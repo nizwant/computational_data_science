@@ -112,14 +112,15 @@ int main(int argc, char **argv) {
             else if (strncmp(message, "/message", 8) == 0){
 
                 char message_username[32];
+                char temp[MAX_MESS_SIZE];
 
-                if (sscanf(message, "/get_user %31s ", message_username) == 1) {
+                if (sscanf(message, "/message %31s %[^\n]", message_username, temp) == 2) {
                     // success
                     header.type = MESSAGE;
 
                     MessagePacket p2;
                     p2.header = header;
-                    strncpy(p2.message, message, sizeof(p2.message) - 1);
+                    strncpy(p2.message, temp, sizeof(p2.message) - 1);
                     p2.message[sizeof(p2.message) - 1] = '\0';
 
                     if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0) {
@@ -137,7 +138,7 @@ int main(int argc, char **argv) {
 
             else
             {
-                printf("bad format expected one of those:\n - /quit\n - /get_user username password\n - /ping username\n - /message username");
+                printf("bad format expected one of those:\n - /quit\n - /get_user username password\n - /ping username\n - /message username\n");
             }
             
         }
