@@ -11,7 +11,7 @@
 
 #define MAX_MESS_SIZE 1024
 #define SERVER_PORT 2137
-#define SERVER_IP "127.0.0.1"
+#define SERVER_IP "34.51.191.178"
 #define SERVER_USERNAME "server"
 
 typedef enum _packet_type

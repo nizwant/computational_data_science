@@ -59,7 +59,7 @@ int main(int argc, char **argv)
         close(fd);
         return 1;
     }
-    add_user_to_hashmap(&clients_hashmap, SERVER_USERNAME, "server", server);
+    add_user_to_hashmap(&clients_hashmap, SERVER_USERNAME, SERVER_USERNAME, server);
 
     int received_init_response = 0;
     PacketHeader header = {0};
