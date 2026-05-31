@@ -148,7 +148,7 @@ int main(int argc, char **argv)
                     if (peer == NULL)
                     {
                         printf("peer '%s' not found, use /get_user first\n", message_username);
-                        break;
+                        continue;
                     }
 
                     struct sockaddr_in peer_addr = {0};
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
                     if (target == NULL)
                     {
                         printf("peer '%s' not found, use /get_user first\n", ping_target);
-                        break;
+                        continue;
                     }
 
                     struct sockaddr_in target_addr = {0};
