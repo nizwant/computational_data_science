@@ -1,0 +1,7 @@
+## 0.1.0 (2026-05-31)
+
+- Initial release
+- UDP peer-to-peer chat with central synchronization server
+- Client commands: /get_user, /message, /ping, /quit
+- Peer discovery via server-mediated introduction
+- hash table based peer tracking on the server
