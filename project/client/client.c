@@ -77,6 +77,8 @@ int main(int argc, char **argv)
 
     printf("Connecting to server on: %s:%d\n", SERVER_IP, SERVER_PORT);
 
+    time_t last_ping = time(NULL);
+
     for (;;)
     {
         fd_set rfds;
@@ -86,10 +88,25 @@ int main(int argc, char **argv)
 
         int maxfd = (fd > STDIN_FILENO ? fd : STDIN_FILENO) + 1;
 
-        if (select(maxfd, &rfds, NULL, NULL, NULL) < 0)
+        struct timeval tv;
+        tv.tv_sec = 10;
+        tv.tv_usec = 0;
+
+        int sel = select(maxfd, &rfds, NULL, NULL, &tv);
+        if (sel < 0)
         {
             perror("select");
             break;
+        }
+
+        if (sel == 0 || time(NULL) - last_ping >= 10)
+        {
+            header.type = PING;
+            if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&server, sizeof(server)) < 0)
+            {
+                perror("sendto ping");
+            }
+            last_ping = time(NULL);
         }
 
         if (FD_ISSET(STDIN_FILENO, &rfds))
