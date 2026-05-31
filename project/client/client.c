@@ -59,6 +59,7 @@ int main(int argc, char **argv)
         close(fd);
         return 1;
     }
+    add_user_to_hashmap(&clients_hashmap, SERVER_USERNAME, "server", server);
 
     int received_init_response = 0;
     PacketHeader header = {0};
@@ -175,12 +176,37 @@ int main(int argc, char **argv)
 
             else if (strncmp(message, "/ping", 5) == 0)
             {
-                header.type = PING;
+                char ping_target[32];
+                if (sscanf(message, "/ping %31s", ping_target) == 1)
+                {
+                    Client *target;
+                    HASH_FIND_STR(clients_hashmap, ping_target, target);
+                    if (target == NULL)
+                    {
+                        printf("peer '%s' not found, use /get_user first\n", ping_target);
+                        break;
+                    }
+
+                    struct sockaddr_in target_addr = {0};
+                    target_addr.sin_family = AF_INET;
+                    target_addr.sin_port = htons(target->port);
+                    target_addr.sin_addr = target->ip_addr;
+
+                    header.type = PING;
+                    if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&target_addr, sizeof(target_addr)) < 0)
+                    {
+                        perror("sendto");
+                    }
+                }
+                else
+                {
+                    printf("bad format, expected format: /ping username\n");
+                }
             }
 
             else
             {
-                printf("bad format expected one of those:\n - /quit\n - /get_user username password\n - /ping username\n - /message username\n");
+                printf("bad format expected one of those:\n - /quit\n - /get_user username password\n - /ping username\n - /message username message\n");
             }
         }
 
