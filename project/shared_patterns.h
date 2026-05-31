@@ -94,7 +94,7 @@ int setup_socket(int server_socket) {
 }
 
 
-int add_user_to_hashmap(Client **clients_hashmap, char *username, char* password, struct sockaddr_in src) {
+int add_user_to_hashmap(Client **clients_hashmap, const char *username, const char *password, struct sockaddr_in src) {
     Client *s;
 
     HASH_FIND_STR(*clients_hashmap, username, s);
