@@ -142,7 +142,19 @@ int main(int argc, char **argv)
 
                 if (sscanf(message, "/message %31s %[^\n]", message_username, temp) == 2)
                 {
-                    // success
+                    Client *peer;
+                    HASH_FIND_STR(clients_hashmap, message_username, peer);
+                    if (peer == NULL)
+                    {
+                        printf("peer '%s' not found, use /get_user first\n", message_username);
+                        break;
+                    }
+
+                    struct sockaddr_in peer_addr = {0};
+                    peer_addr.sin_family = AF_INET;
+                    peer_addr.sin_port = htons(peer->port);
+                    peer_addr.sin_addr = peer->ip_addr;
+
                     header.type = MESSAGE;
 
                     MessagePacket p2;
@@ -150,14 +162,14 @@ int main(int argc, char **argv)
                     strncpy(p2.message, temp, sizeof(p2.message) - 1);
                     p2.message[sizeof(p2.message) - 1] = '\0';
 
-                    if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&server, sizeof(server)) < 0)
+                    if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&peer_addr, sizeof(peer_addr)) < 0)
                     {
                         perror("sendto");
                     }
                 }
                 else
                 {
-                    printf("bad format, expected format: /message username\n");
+                    printf("bad format, expected format: /message username message\n");
                 }
             }
 
@@ -200,13 +212,26 @@ int main(int argc, char **argv)
                 break;
 
             case START_PINGING_PEER:
+            {
                 printf("START_PINGING_PEER Packet received\n");
 
                 StartPingingPeerPacket *spp_packet = (StartPingingPeerPacket *)buf;
                 printf("Username: %s\n", spp_packet->username);
                 printf("Port: %d\n", spp_packet->port);
 
+                struct sockaddr_in peer_addr = {0};
+                peer_addr.sin_family = AF_INET;
+                peer_addr.sin_port = htons(spp_packet->port);
+                peer_addr.sin_addr = spp_packet->ip;
+
+                add_user_to_hashmap(&clients_hashmap, spp_packet->username, "", peer_addr);
+
+                char peer_ip[INET_ADDRSTRLEN];
+                inet_ntop(AF_INET, &spp_packet->ip, peer_ip, sizeof(peer_ip));
+                printf("Peer %s added (%s:%d)\n", spp_packet->username, peer_ip, spp_packet->port);
+
                 break;
+            }
 
             case MESSAGE:
             {
