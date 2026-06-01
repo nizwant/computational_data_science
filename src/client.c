@@ -1,4 +1,4 @@
-#include "../shared_patterns.h"
+#include "shared_patterns.h"
 
 void print_message(const struct sockaddr_in *src, const char *message)
 {

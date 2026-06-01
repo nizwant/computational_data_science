@@ -1,10 +1,12 @@
 [project]
-name = "computional-ds"
-version = "0.1.0"
-description = ""
+name = "PeerChat"
+version = "0.0.1"
+description = "UDP peer-to-peer messaging library backed by a C networking core. Provides Python bindings for creating sockets, discovering peers via a central synchronization server written in C, and exchanging messages directly between clients without relaying through the server. It leverages a custom made data protocol."
 authors = [
-    {name = "nizwant",email = "mateusznizwantowski@gmail.com"}
+    {name = "nizwant", email = "mateusznizwantowski@gmail.com"}
 ]
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.13"
 
 dependencies = [

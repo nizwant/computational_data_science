@@ -1,4 +1,4 @@
-#include "../shared_patterns.h"
+#include "shared_patterns.h"
 
 int main()
 {
