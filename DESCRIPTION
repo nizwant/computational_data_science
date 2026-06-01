@@ -1,0 +1,25 @@
+Package: PeerChat
+Type: Package
+Title: PeerChat: Peer to Peer messaging library
+Version: 0.0.1
+Date: 2026-06-01
+Authors@R: c(
+    person("Mateusz", "Nizwantowski",
+        role = c("aut", "cre"),
+        email = "mateusznizwantowski@gmail.com")
+    )
+Description: UDP peer-to-peer messaging library backed by a C networking
+    core. Provides R bindings for creating sockets, discovering peers via a
+    central synchronization server written in C, and exchanging messages directly between
+    clients without relaying through the server. It leverages custom made data protocol.
+BugReports: https://github.com/nizwant/computational_data_science/issues
+URL:
+    https://github.com/nizwant/computational_data_science
+License: MIT + file LICENSE
+Imports:
+    Rcpp
+Suggests:
+    datasets,
+LinkingTo: Rcpp
+Encoding: UTF-8
+RoxygenNote: 7.3.3
