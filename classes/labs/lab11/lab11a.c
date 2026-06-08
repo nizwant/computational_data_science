@@ -1,68 +1,129 @@
 #ifndef _OPENMP
-#error "Compile wiht -fopenmp"
+#error "Compile with -fopenmp"
 #endif
 
-void square(const double* x, size_t n, double* y){
-    int num_threads = omp_get_max_threads();
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-    int partition_size = n / num_threads;
+#define MIN(a,b) (((a)<(b))?a:b)
+void square(const double* x, size_t n, double* y)
+{
+    // #pragma omp parallel for
+    // for (size_t i=0; i<n; ++i)
+    //    y[i] = x[i]*x[i];
 
-    if(partition_size < 3000) num_threads = 1;
+    // #pragma omp parallel
+    // {
+    //    #pragma omp for
+    //    for (size_t i=0; i<n; ++i)
+    //       y[i] = x[i]*x[i];
+    //  }
 
     #pragma omp parallel
     {
-        int thread_number = omp_get_thread_num();
-        for (size_t i=0; i<partition_size+10; i++){
-            if (i + thread_number*partition_size < n){
-                y[i + thread_number*partition_size] = x[i + thread_number*partition_size] * x[i + thread_number*partition_size];
-            }
-           
-        }
+        int k = omp_get_num_threads();
+        int t = omp_get_thread_num();
+        // for (size_t i=t; i<n; i+=k) bad locality of reference ;/
+
+        //for (size_t i=(t*n)/k; i<((t+1)*n)/k; ++i)
+
+
+        int B = n/k;
+        for (size_t i=t*B; i<((t<k-1)?(t+1)*B:n); ++i)
+            y[i] = x[i]*x[i];
     }
 }
+/*
+double mean(const double* x, size_t n)
+{
+    int K = omp_get_max_threads();
+    double sums[K];
+    for (int i=0; i<K; ++i) sums[i] = 0.0;
 
-double mean(const double* x, size_t n){
-    int num_threads = omp_get_max_threads();
-    double sums[num_threads];
-    for(int i=0; i<num_threads; i++) sums[i] = 0.0;
-    
     #pragma omp parallel
     {
-        int thread_number = omp_get_thread_num();
+        int k = omp_get_num_threads();
+        int t = omp_get_thread_num();
+        #pragma omp for
+        for (size_t i=0; i<n; ++i) {
+            sums[t] += x[i];
+        }
+    }
+
+    double sum = 0.0;
+    for (int i=0; i<K; ++i) sum += sums[i];
+    return sum/(double)n;
+}*/
+
+
+// double mean(const double* x, size_t n)
+// {
+//     double sum = 0.0;
+//
+//     #pragma omp parallel
+//     {
+//         double mysum = 0.0;
+//         #pragma omp for
+//         for (size_t i=0; i<n; ++i) {
+//             mysum += x[i];
+//         }
+//
+//         #pragma omp atomic
+//         sum += mysum;
+//     }
+//
+//     return sum/(double)n;
+// }
+
+
+double mean(const double* x, size_t n)
+{
+    double suma = 0.0;
+
+    #pragma omp parallel for reduction(+:suma)
+    for (size_t i=0; i<n; ++i)
+        suma += x[i];
+
+    return suma/(double)n;
+}
+
+void normalise(const double* x, size_t n, double* y)
+{
+    //y[i] = (x[i]-min(x))/(max(x)-min(x));
+    double cmin = x[n-1];
+    double cmax = x[n-1];
+    #pragma omp parallel
+    {
+        #pragma omp for reduction(min:cmin) reduction(max:cmax)
+        for (size_t i=0; i<n-1; ++i)
+            if (x[i] < cmin) cmin = x[i];
+            else if (x[i] > cmax) cmax = x[i];
+
+        //#pragma omp barrier  //redundant
 
         #pragma omp for
-        for (size_t i=0; i<n; i++) sums[thread_number] += x[i];
+        for (size_t i=0; i<n; ++i)
+            y[i] = (x[i]-cmin)/(cmax-cmin);
     }
-
-    double total_sum = 0.0;
-    for (int i=0; i<num_threads; i++){
-        total_sum += sums[i];
-    }
-
-    return total_sum / n;
-    
 }
 
-
-void normalise(const double* x, size_t n, double* y){
-
-    double minimum = 1000000000.0;
-    double maximum = -1000000000.0;
-
-    #pragma omp parallel for reduction(min:minimum) reduction(max:maximum)
-    for (size_t i = 0; i < n; i++) {
-        if (minimum > x[i]){
-            minimum = x[i];
-        }
-        if (maximum < x[i]){
-            maximum = x[i];
-        }
-    }
-
-    #pragma omp parallel for
-    for (size_t i = 0; i < n; i++) {
-        y[i] = (x[i] - minimum) / (maximum - minimum);
-    }
-
+int main()
+{
+    size_t n = 1000000000;
+    double *x = malloc(sizeof(double)*n);
+    for (size_t i=0; i<n; ++i) x[i] = i/(double)n;
+    double *y = malloc(sizeof(double)*n);
+    double t0 = omp_get_wtime();  // "wall" time
+    //square(x, n, y);
+    normalise(x, n, y);
+    //double m = mean(x, n);
+    double t1 = omp_get_wtime();
+    //printf("mean=%f\n", m);
+    printf("time=%f s\n", t1-t0);
+    return 0;
 }
+// gcc lab11a.c -fopenmp -O3 -march=native && OMP_NUM_THREADS=10 ./a.out
+
+
 
