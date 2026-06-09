@@ -76,6 +76,50 @@ void mat_mul(double *A, double *B, double **C, int size){
     }
 }
 
+void better_mat_mul(double *A, double *B, double **C, int size){
+
+    *C = (double*)malloc(sizeof(double) * size * size);
+    for(size_t i=0; i<size*size; i++) (*C)[i] = 0;
+
+    for(size_t j=0; j<size; j++){
+        for(size_t k=0; k<size; k++){
+            double bkj = B[j*size + k];
+            for(size_t i=0; i<size; i++){
+                (*C)[i + j * size] += (A[i + k * size] * bkj);
+            }
+        }
+    }
+}
+
+#define BLOCKSIZE 16
+void better_mat_mul_with_blocking(double *A, double *B, double **C, int size){
+
+    *C = (double*)malloc(sizeof(double) * size * size);
+    for(size_t i=0; i<size*size; i++) (*C)[i] = 0;
+
+    for(size_t jj=0; jj<size; jj+=BLOCKSIZE){
+        for(size_t kk=0; kk<size; kk+=BLOCKSIZE){
+            for(size_t ii=0; ii<size; ii+=BLOCKSIZE){
+
+                int jmax = (jj + BLOCKSIZE < size) ? jj + BLOCKSIZE : size;
+                int kmax = (kk + BLOCKSIZE < size) ? kk + BLOCKSIZE : size;
+                int imax = (ii + BLOCKSIZE < size) ? ii + BLOCKSIZE : size;
+
+                for(int j=jj;j<jmax;j++){
+                    for(int k=kk; k<kmax;k++){
+                        double bkj = B[j*size + k];
+                        for(int i=ii; i<imax; i++){
+                            (*C)[i + j * size] += (A[i + k * size] * bkj);
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+}
+
+
 
 int main(){
 
