@@ -1,5 +1,27 @@
 # Changelog
 
+## PeerChat 0.6.0 (2026-06-15)
+
+- Added Python unit tests
+- Added GitHub Actions CI workflow for Python unit tests
+- Added Python vignette documenting the Python API
+
+## PeerChat 0.5.0 (2026-06-14)
+
+- Added Python bindings via C/Python API (`src/py_peer_chat.c`)
+- Added `PEERCHAT_SERVER_IP` environment variable override for
+  configurable server ip address
+- Added R unit tests in testthat
+
+## PeerChat 0.4.0 (2026-06-14)
+
+- Added pkgdown site
+- Added interactive R client vignette mirroring the C client
+- Added `.Rbuildignore` to exclude non-package files from the tarball
+- Added GitHub Actions CI workflow for R CMD check on macOS and Linux
+- Fixed R CMD check warnings
+- Added R CMD check status badge to README
+
 ## PeerChat 0.3.0 (2026-06-13)
 
 - Added R package bindings via Rcpp

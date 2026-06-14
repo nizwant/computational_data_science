@@ -68,6 +68,28 @@ peer_receive(1000)
 peer_disconnect()
 ```
 
+## Quick start (Python)
+
+``` python
+import PeerChat
+
+# Connect to the server
+PeerChat.connect("my_username", "my_password")
+
+# Discover a peer
+PeerChat.get_user("friend", "friends_password")
+PeerChat.receive(1000)  # wait for server response
+
+# Send a message
+PeerChat.send_message("friend", "Hello my friend!")
+
+# Receive incoming packets
+PeerChat.receive(1000)
+
+# Disconnect
+PeerChat.disconnect()
+```
+
 ## Computational Data Science
 
 This repo is for WUT course aimed at learning C with Data Science
@@ -104,3 +126,5 @@ course [Prof. Marek Gagolewski](https://www.gagolewski.com/index.html).
 
 - [Interactive Client in
   R](https://nizwant.github.io/computational_data_science/articles/peer-chat-client.md):
+- [Interactive Client in
+  Python](https://nizwant.github.io/computational_data_science/articles/peer-chat-python.md):

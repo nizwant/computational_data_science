@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PeerChat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/peer-chat-client.html">Interactive Client in R</a></li>
+    <li><a class="dropdown-item" href="../articles/peer-chat-python.html">Interactive Client in Python</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -48,6 +49,27 @@
       <small>Source: <a href="https://github.com/nizwant/computational_data_science/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="peerchat-060-2026-06-15">PeerChat 0.6.0 (2026-06-15)<a class="anchor" aria-label="anchor" href="#peerchat-060-2026-06-15"></a></h2>
+<ul><li>Added Python unit tests</li>
+<li>Added GitHub Actions CI workflow for Python unit tests</li>
+<li>Added Python vignette documenting the Python API</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="peerchat-050-2026-06-14">PeerChat 0.5.0 (2026-06-14)<a class="anchor" aria-label="anchor" href="#peerchat-050-2026-06-14"></a></h2>
+<ul><li>Added Python bindings via C/Python API (<code>src/py_peer_chat.c</code>)</li>
+<li>Added <code>PEERCHAT_SERVER_IP</code> environment variable override for configurable server ip address</li>
+<li>Added R unit tests in testthat</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="peerchat-040-2026-06-14">PeerChat 0.4.0 (2026-06-14)<a class="anchor" aria-label="anchor" href="#peerchat-040-2026-06-14"></a></h2>
+<ul><li>Added pkgdown site</li>
+<li>Added interactive R client vignette mirroring the C client</li>
+<li>Added <code>.Rbuildignore</code> to exclude non-package files from the tarball</li>
+<li>Added GitHub Actions CI workflow for R CMD check on macOS and Linux</li>
+<li>Fixed R CMD check warnings</li>
+<li>Added R CMD check status badge to README</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="peerchat-030-2026-06-13">PeerChat 0.3.0 (2026-06-13)<a class="anchor" aria-label="anchor" href="#peerchat-030-2026-06-13"></a></h2>
 <ul><li>Added R package bindings via Rcpp</li>
