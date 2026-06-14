@@ -1,27 +1,5 @@
 #include "shared_patterns.h"
 
-void print_message(const struct sockaddr_in *src, const char *message)
-{
-    char ip[INET_ADDRSTRLEN];
-    char time_str[16];
-
-    // metadata creation
-    inet_ntop(AF_INET, &src->sin_addr, ip, sizeof(ip));
-
-    time_t now = time(NULL);
-    struct tm *tm_info = localtime(&now);
-
-    strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
-
-    printf("[%s:%d; %s] %s\n",
-           ip,
-           ntohs(src->sin_port),
-           time_str,
-           message);
-
-    fflush(stdout);
-}
-
 int main(int argc, char **argv)
 {
     if (argc != 3)
