@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/nizwant/computational_data_science/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nizwant/computational_data_science/actions/workflows/R-CMD-check.yaml)
+[![Python-tests](https://github.com/nizwant/computational_data_science/actions/workflows/python-tests.yaml/badge.svg)](https://github.com/nizwant/computational_data_science/actions/workflows/python-tests.yaml)
 <!-- badges: end -->
 
 UDP peer-to-peer messaging library backed by a C networking core. Provides R and Python bindings for creating sockets, discovering peers via a central synchronization server written in C, and exchanging messages directly between clients without relaying through the server. It leverages a custom made data protocol.

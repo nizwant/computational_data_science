@@ -1,0 +1,32 @@
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+name: Python-tests
+
+jobs:
+    pytest:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [macos-latest, ubuntu-latest]
+                python-version: ["3.12", "3.13"]
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Install dependencies
+              run: pip install pytest
+
+            - name: Build C extension
+              run: python setup.py build_ext --inplace
+
+            - name: Run tests
+              run: pytest tests/pytest/ -v

@@ -10,3 +10,4 @@
 ^PeerChat\.Rcheck$
 ^PeerChat.*\.tar\.gz$
 ^build$
+^tests/pytest$
