@@ -37,4 +37,45 @@ int initialize_client(const char *username, const char *password, struct sockadd
     return fd;
 }
 
+int send_message(int fd, const char *message, struct in_addr ip, uint16_t port)
+{
+    struct sockaddr_in dest = {0};
+    dest.sin_family = AF_INET;
+    dest.sin_port = htons(port);
+    dest.sin_addr = ip;
+
+    PacketHeader header = {0};
+    header.type = MESSAGE;
+
+    MessagePacket p = {0};
+    p.header = header;
+    strncpy(p.message, message, sizeof(p.message) - 1);
+    p.message[sizeof(p.message) - 1] = '\0';
+
+    if (sendto(fd, &p, sizeof(p), 0, (struct sockaddr *)&dest, sizeof(dest)) < 0)
+    {
+        perror("sendto");
+        return -1;
+    }
+    return 0;
+}
+
+int send_ping(int fd, struct in_addr ip, uint16_t port)
+{
+    struct sockaddr_in dest = {0};
+    dest.sin_family = AF_INET;
+    dest.sin_port = htons(port);
+    dest.sin_addr = ip;
+
+    PacketHeader header = {0};
+    header.type = PING;
+
+    if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&dest, sizeof(dest)) < 0)
+    {
+        perror("sendto");
+        return -1;
+    }
+    return 0;
+}
+
 #endif

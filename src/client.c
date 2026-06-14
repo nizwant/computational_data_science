@@ -105,22 +105,7 @@ int main(int argc, char **argv)
                         continue;
                     }
 
-                    struct sockaddr_in peer_addr = {0};
-                    peer_addr.sin_family = AF_INET;
-                    peer_addr.sin_port = htons(peer->port);
-                    peer_addr.sin_addr = peer->ip_addr;
-
-                    header.type = MESSAGE;
-
-                    MessagePacket p2;
-                    p2.header = header;
-                    strncpy(p2.message, temp, sizeof(p2.message) - 1);
-                    p2.message[sizeof(p2.message) - 1] = '\0';
-
-                    if (sendto(fd, &p2, sizeof(p2), 0, (struct sockaddr *)&peer_addr, sizeof(peer_addr)) < 0)
-                    {
-                        perror("sendto");
-                    }
+                    send_message(fd, temp, peer->ip_addr, peer->port);
                 }
                 else
                 {
@@ -141,16 +126,7 @@ int main(int argc, char **argv)
                         continue;
                     }
 
-                    struct sockaddr_in target_addr = {0};
-                    target_addr.sin_family = AF_INET;
-                    target_addr.sin_port = htons(target->port);
-                    target_addr.sin_addr = target->ip_addr;
-
-                    header.type = PING;
-                    if (sendto(fd, &header, sizeof(header), 0, (struct sockaddr *)&target_addr, sizeof(target_addr)) < 0)
-                    {
-                        perror("sendto");
-                    }
+                    send_ping(fd, target->ip_addr, target->port);
                 }
                 else
                 {
