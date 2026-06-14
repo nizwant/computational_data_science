@@ -1,17 +1,17 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE-text.html</loc></url>
-<url><loc>/TODO.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/news/index.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/peer_connect.html</loc></url>
-<url><loc>/reference/peer_disconnect.html</loc></url>
-<url><loc>/reference/peer_get_fd.html</loc></url>
-<url><loc>/reference/peer_get_user.html</loc></url>
-<url><loc>/reference/peer_receive.html</loc></url>
-<url><loc>/reference/peer_send_message.html</loc></url>
-<url><loc>/reference/peer_send_ping.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/404.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/LICENSE-text.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/TODO.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/authors.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/index.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/news/index.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/index.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_connect.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_disconnect.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_get_fd.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_get_user.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_receive.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_send_message.html</loc></url>
+<url><loc>https://nizwant.github.io/computational_data_science/reference/peer_send_ping.html</loc></url>
 </urlset>
 

@@ -13,7 +13,7 @@ Description: UDP peer-to-peer messaging library backed by a C networking
     directly between clients without relaying through the server. It
     leverages a custom made data protocol.
 License: MIT + file LICENSE
-URL: https://github.com/nizwant/computational_data_science
+URL: https://github.com/nizwant/computational_data_science, https://nizwant.github.io/computational_data_science/
 BugReports: https://github.com/nizwant/computational_data_science/issues
 Imports:
     Rcpp

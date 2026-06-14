@@ -1,0 +1,42 @@
+# Computational Data Science
+
+WUT course aimed at learning C with Data Science algorithms in mind.
+
+## Project: UDP P2P Chat
+
+A peer-to-peer messaging built on UDP with a central synchronization
+server for peer discovery.
+
+### How it works
+
+1.  Client registers with the server via username
+2.  Client pings the server and known peers for connection to persist
+3.  To message someone, request their address from the server via
+    `/get_user`
+4.  Server validates credentials and introduces both peers to each other
+5.  Peers communicate directly (no relay through server)
+
+## Course materials
+
+Materials found in `classes` directory were made by the author of the
+course [Prof. Marek Gagolewski](https://www.gagolewski.com/index.html).
+
+# Package index
+
+## All functions
+
+- [`peer_connect()`](https://nizwant.github.io/computational_data_science/reference/peer_connect.md)
+  : Connect to the PeerChat server
+- [`peer_disconnect()`](https://nizwant.github.io/computational_data_science/reference/peer_disconnect.md)
+  : Disconnect from PeerChat
+- [`peer_get_fd()`](https://nizwant.github.io/computational_data_science/reference/peer_get_fd.md)
+  : Get the socket file descriptor
+- [`peer_get_user()`](https://nizwant.github.io/computational_data_science/reference/peer_get_user.md)
+  : Discover a peer by username
+- [`peer_receive()`](https://nizwant.github.io/computational_data_science/reference/peer_receive.md)
+  : Receive an incoming packet
+- [`peer_send_message()`](https://nizwant.github.io/computational_data_science/reference/peer_send_message.md)
+  : Send a message to a peer
+- [`peer_send_ping()`](https://nizwant.github.io/computational_data_science/reference/peer_send_ping.md)
+  : Ping a peer
+

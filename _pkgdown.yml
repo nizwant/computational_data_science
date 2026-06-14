@@ -1,0 +1,16 @@
+url: https://nizwant.github.io/computational_data_science/
+
+template:
+  light-switch: true
+  bootstrap: 5
+  math-rendering: "mathjax"
+
+navbar:
+  structure:
+    left: [intro, reference, news]
+    right: [search, lightswitch, github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/nizwant/computational_data_science
+      aria-label: GitHub
