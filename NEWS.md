@@ -1,3 +1,9 @@
+# PeerChat 0.5.0 (2026-06-15)
+
+- Added Python bindings via C/Python API (`src/py_peer_chat.c`)
+- Added `PEERCHAT_SERVER_IP` environment variable override for configurable server ip address
+- Added R unit tests in testthat
+
 # PeerChat 0.4.0 (2026-06-14)
 
 - Added pkgdown site

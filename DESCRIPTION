@@ -1,7 +1,7 @@
 Package: PeerChat
 Type: Package
 Title: Peer-to-Peer Messaging Library
-Version: 0.4.0
+Version: 0.5.0
 Date: 2026-06-14
 Authors@R:
     person("Mateusz", "Nizwantowski",
