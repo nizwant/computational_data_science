@@ -1,4 +1,4 @@
-#include "protocol.h"
+#include "c_common.h"
 
 int setup_socket(int server_socket)
 {

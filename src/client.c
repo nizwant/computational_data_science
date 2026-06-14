@@ -1,4 +1,4 @@
-#include "protocol.h"
+#include "c_common.h"
 #include "client_lib.h"
 
 int main(int argc, char **argv)

@@ -84,4 +84,8 @@ typedef struct _client
     UT_hash_handle hh;
 } Client;
 
+int setup_socket(int server_socket);
+int add_user_to_hashmap(Client **clients_hashmap, const char *username, const char *password, struct sockaddr_in src);
+void print_message(const struct sockaddr_in *src, const char *message);
+
 #endif
