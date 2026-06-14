@@ -1,4 +1,4 @@
-# Interactive PeerChat Client in R
+# Interactive Client in R
 
 This vignette shows how to build an interactive peer-to-peer chat client
 in R using the PeerChat package, replicating the original client written

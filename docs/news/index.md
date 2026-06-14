@@ -1,6 +1,6 @@
 # Changelog
 
-## PeerChat 0.3.0 (2026-06-14)
+## PeerChat 0.3.0 (2026-06-13)
 
 - Added R package bindings via Rcpp
 - Generated roxygen2 documentation (`man/` pages)

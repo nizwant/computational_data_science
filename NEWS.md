@@ -1,4 +1,13 @@
-# PeerChat 0.3.0 (2026-06-14)
+# PeerChat 0.4.0 (2026-06-14)
+
+- Added pkgdown site
+- Added interactive R client vignette mirroring the C client
+- Added `.Rbuildignore` to exclude non-package files from the tarball
+- Added GitHub Actions CI workflow for R CMD check on macOS and Linux
+- Fixed R CMD check warnings
+- Added R CMD check status badge to README
+
+# PeerChat 0.3.0 (2026-06-13)
 
 - Added R package bindings via Rcpp
 - Generated roxygen2 documentation (`man/` pages)
