@@ -1,0 +1,2 @@
+PKG_CPPFLAGS = -I.
+OBJECTS = RcppExports.o rcpp_peer_chat.o client_lib.o c_common.o
