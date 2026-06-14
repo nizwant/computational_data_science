@@ -17,6 +17,12 @@
 #define SERVER_IP "34.51.191.178"
 #define SERVER_USERNAME "server"
 
+#ifdef DEBUG
+#define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#else
+#define DEBUG_PRINT(...) ((void)0)
+#endif
+
 typedef enum _packet_type
 {
     INIT,
