@@ -1,6 +1,6 @@
 [project]
 name = "PeerChat"
-version = "0.5.0"
+version = "0.6.0"
 description = "UDP peer-to-peer messaging library backed by a C networking core. Provides Python bindings for creating sockets, discovering peers via a central synchronization server written in C, and exchanging messages directly between clients without relaying through the server. It leverages a custom made data protocol."
 authors = [
     {name = "nizwant", email = "mateusznizwantowski@gmail.com"}

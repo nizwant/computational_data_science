@@ -1,3 +1,9 @@
+# PeerChat 0.6.0 (2026-06-15)
+
+- Added Python unit tests
+- Added GitHub Actions CI workflow for Python unit tests
+- Added Python vignette documenting the Python API
+
 # PeerChat 0.5.0 (2026-06-14)
 
 - Added Python bindings via C/Python API (`src/py_peer_chat.c`)

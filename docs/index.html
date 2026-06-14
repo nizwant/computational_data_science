@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">PeerChat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/peer-chat-client.html">Interactive Client in R</a></li>
+    <li><a class="dropdown-item" href="articles/peer-chat-python.html">Interactive Client in Python</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -135,6 +136,27 @@
 <span><span class="fu"><a href="reference/peer_disconnect.html">peer_disconnect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="quick-start-python">Quick start (Python)<a class="anchor" aria-label="anchor" href="#quick-start-python"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="im">import</span> PeerChat</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># Connect to the server</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>PeerChat.<span class="ex">connect</span>(<span class="st">"my_username"</span>, <span class="st">"my_password"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Discover a peer</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>PeerChat.get_user(<span class="st">"friend"</span>, <span class="st">"friends_password"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>PeerChat.receive(<span class="dv">1000</span>)  <span class="co"># wait for server response</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co"># Send a message</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>PeerChat.send_message(<span class="st">"friend"</span>, <span class="st">"Hello my friend!"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co"># Receive incoming packets</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>PeerChat.receive(<span class="dv">1000</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co"># Disconnect</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>PeerChat.disconnect()</span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="computational-data-science">Computational Data Science<a class="anchor" aria-label="anchor" href="#computational-data-science"></a>
 </h2>
 <p>This repo is for WUT course aimed at learning C with Data Science algorithms in mind. It features a peer-to-peer messaging built on UDP with a central synchronization server for peer discovery.</p>
@@ -181,6 +203,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/nizwant/computational_data_science/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/nizwant/computational_data_science/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/nizwant/computational_data_science/actions/workflows/python-tests.yaml" class="external-link"><img src="https://github.com/nizwant/computational_data_science/actions/workflows/python-tests.yaml/badge.svg" alt="Python-tests"></a></li>
 </ul>
 </div>
 
