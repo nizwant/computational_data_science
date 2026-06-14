@@ -10,16 +10,17 @@
 #include <sys/select.h>
 #include <time.h>
 
-#include "uthash.h"
-
 #ifdef USING_R
 #include <R.h>
 #define PRINTF Rprintf
 #define EPRINTF REprintf
+#define uthash_fatal(msg) error("uthash: %s", msg)
 #else
 #define PRINTF printf
 #define EPRINTF(...) fprintf(stderr, __VA_ARGS__)
 #endif
+
+#include "uthash.h"
 
 #define MAX_MESS_SIZE 1024
 #define SERVER_PORT 2137
