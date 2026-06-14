@@ -1,4 +1,4 @@
-#include "shared_patterns.h"
+#include "client.h"
 
 int main(int argc, char **argv)
 {
@@ -11,47 +11,23 @@ int main(int argc, char **argv)
     const char *username = argv[1];
     const char *password = argv[2];
 
-    // initialize hashmap
-    Client *clients_hashmap = NULL;
+    // create socket and send init message
+    PacketHeader header = {0};
+    struct sockaddr_in server = {0};
+    int fd = initialize_client(username, password, &server);
+    if (fd < 0)
+        return 1;
 
-    // add server to hashmap
-
+    // add create dummy client
     struct sockaddr_in client_dummy_socket = {
         .sin_family = AF_INET,
         .sin_addr.s_addr = htonl(INADDR_ANY)};
 
+    // initialize hashmap
+    Client *clients_hashmap = NULL;
     add_user_to_hashmap(&clients_hashmap, username, password, client_dummy_socket);
-
-    int fd = setup_socket(0);
-    if (fd < 0)
-    {
-        return 1;
-    }
-
-    struct sockaddr_in server = {0};
-    server.sin_family = AF_INET;
-    server.sin_port = htons(SERVER_PORT);
-    if (inet_pton(AF_INET, SERVER_IP, &server.sin_addr) != 1)
-    {
-        fprintf(stderr, "bad server IP\n");
-        close(fd);
-        return 1;
-    }
     add_user_to_hashmap(&clients_hashmap, SERVER_USERNAME, SERVER_USERNAME, server);
-
     int received_init_response = 0;
-    PacketHeader header = {0};
-    header.type = INIT;
-    strncpy(header.sender_username, username, sizeof(header.sender_username) - 1);
-
-    InitPacket init_packet = {0};
-    init_packet.header = header;
-    strncpy(init_packet.password, password, sizeof(init_packet.password) - 1);
-
-    if (sendto(fd, &init_packet, sizeof(init_packet), 0, (struct sockaddr *)&server, sizeof(server)) < 0)
-    {
-        perror("sendto");
-    }
 
     printf("Connecting to server on: %s:%d\n", SERVER_IP, SERVER_PORT);
 
