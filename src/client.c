@@ -47,29 +47,29 @@ int main(int argc, char **argv)
 
         if (FD_ISSET(STDIN_FILENO, &rfds))
         {
-            char message[MAX_MESS_SIZE];
-            if (!fgets(message, sizeof(message), stdin))
+            char user_input[MAX_MESS_SIZE];
+            if (!fgets(user_input, sizeof(user_input), stdin))
             {
                 break; // EOF
             }
 
-            size_t len = strlen(message);
-            if (len > 0 && message[len - 1] == '\n')
+            size_t len = strlen(user_input);
+            if (len > 0 && user_input[len - 1] == '\n')
             {
-                message[len - 1] = '\0';
+                user_input[len - 1] = '\0';
                 len--;
             }
 
-            if (strcmp(message, "/quit") == 0)
+            if (strcmp(user_input, "/quit") == 0)
             {
                 break;
             }
-            else if (strncmp(message, "/get_user", 9) == 0)
+            else if (strncmp(user_input, "/get_user", 9) == 0)
             {
                 char get_username[32];
                 char get_password[32];
 
-                if (sscanf(message, "/get_user %31s %31s", get_username, get_password) == 2)
+                if (sscanf(user_input, "/get_user %31s %31s", get_username, get_password) == 2)
                 {
                     send_get_user(fd, get_username, get_password, &server);
                 }
@@ -78,23 +78,23 @@ int main(int argc, char **argv)
                     printf("bad format, expected format: /get_user username password\n");
                 }
             }
-            else if (strncmp(message, "/message", 8) == 0)
+            else if (strncmp(user_input, "/message", 8) == 0)
             {
 
-                char message_username[32];
-                char temp[MAX_MESS_SIZE];
+                char receiver_username[32];
+                char message[MAX_MESS_SIZE];
 
-                if (sscanf(message, "/message %31s %[^\n]", message_username, temp) == 2)
+                if (sscanf(user_input, "/message %31s %[^\n]", receiver_username, message) == 2)
                 {
                     Client *peer;
-                    HASH_FIND_STR(clients_hashmap, message_username, peer);
+                    HASH_FIND_STR(clients_hashmap, receiver_username, peer);
                     if (peer == NULL)
                     {
-                        printf("peer '%s' not found, use /get_user first\n", message_username);
+                        printf("peer '%s' not found, use /get_user first\n", receiver_username);
                         continue;
                     }
 
-                    send_message(fd, temp, peer->ip_addr, peer->port);
+                    send_message(fd, message, peer->ip_addr, peer->port);
                 }
                 else
                 {
@@ -102,10 +102,10 @@ int main(int argc, char **argv)
                 }
             }
 
-            else if (strncmp(message, "/ping", 5) == 0)
+            else if (strncmp(user_input, "/ping", 5) == 0)
             {
                 char ping_target[32];
-                if (sscanf(message, "/ping %31s", ping_target) == 1)
+                if (sscanf(user_input, "/ping %31s", ping_target) == 1)
                 {
                     Client *target;
                     HASH_FIND_STR(clients_hashmap, ping_target, target);
@@ -181,11 +181,11 @@ int main(int argc, char **argv)
             case MESSAGE:
             {
                 MessagePacket *packet = (MessagePacket *)buf;
-                char message[MAX_MESS_SIZE];
-                strncpy(message, packet->message, sizeof(message) - 1);
-                message[sizeof(message) - 1] = '\0';
+                char received_message[MAX_MESS_SIZE];
+                strncpy(received_message, packet->message, sizeof(received_message) - 1);
+                received_message[sizeof(received_message) - 1] = '\0';
 
-                print_message(&src, message);
+                print_message(&src, received_message);
                 break;
             }
             default:
