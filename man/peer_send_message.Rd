@@ -21,6 +21,6 @@ have been registered via \code{\link{peer_get_user}} first.
 }
 \examples{
 \dontrun{
-peer_send_message("max", "skibidi!")
+peer_send_message("max_my_friend", "skibidi max!")
 }
 }

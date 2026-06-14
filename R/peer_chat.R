@@ -46,7 +46,7 @@ peer_get_user <- function(username, password) {
 #' @export
 #' @examples
 #' \dontrun{
-#' peer_send_message("max", "skibidi!")
+#' peer_send_message("max_my_friend", "skibidi max!")
 #' }
 peer_send_message <- function(recipient, message) {
     invisible(peer_send_message_r(recipient, message))
@@ -62,7 +62,7 @@ peer_send_message <- function(recipient, message) {
 #' @export
 #' @examples
 #' \dontrun{
-#' peer_send_ping("max")
+#' peer_send_ping("max_my_friend")
 #' }
 peer_send_ping <- function(recipient) {
     invisible(peer_send_ping_r(recipient))

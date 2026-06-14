@@ -24,6 +24,6 @@ fails.
 
 ``` r
 if (FALSE) { # \dontrun{
-peer_send_ping("max")
+peer_send_ping("max_my_friend")
 } # }
 ```

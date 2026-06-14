@@ -30,6 +30,6 @@ fails.
 
 ``` r
 if (FALSE) { # \dontrun{
-peer_send_message("max", "skibidi!")
+peer_send_message("max_my_friend", "skibidi max!")
 } # }
 ```

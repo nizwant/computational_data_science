@@ -18,6 +18,6 @@ Sends a ping packet to a previously discovered peer, works also on server.
 }
 \examples{
 \dontrun{
-peer_send_ping("max")
+peer_send_ping("max_my_friend")
 }
 }
