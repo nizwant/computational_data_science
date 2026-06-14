@@ -18,7 +18,7 @@ int peer_connect(const char *username, const char *password)
     server_addr.sin_port = htons(SERVER_PORT);
     if (inet_pton(AF_INET, SERVER_IP, &server_addr.sin_addr) != 1)
     {
-        fprintf(stderr, "bad server IP\n");
+        EPRINTF("bad server IP\n");
         close(client_fd);
         client_fd = -1;
         return -1;
@@ -85,7 +85,7 @@ int peer_send_message(const char *recipient, const char *message)
     HASH_FIND_STR(clients_hashmap, recipient, peer);
     if (peer == NULL)
     {
-        fprintf(stderr, "peer '%s' not found, use peer_get_user first\n", recipient);
+        EPRINTF("peer '%s' not found, use peer_get_user first\n", recipient);
         return -1;
     }
 
@@ -121,7 +121,7 @@ int peer_send_ping(const char *recipient)
     HASH_FIND_STR(clients_hashmap, recipient, peer);
     if (peer == NULL)
     {
-        fprintf(stderr, "peer '%s' not found, use peer_get_user first\n", recipient);
+        EPRINTF("peer '%s' not found, use peer_get_user first\n", recipient);
         return -1;
     }
 

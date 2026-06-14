@@ -61,11 +61,13 @@ void print_message(const struct sockaddr_in *src, const char *message)
 
     strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
 
-    printf("[%s:%d; %s] %s\n",
+    PRINTF("[%s:%d; %s] %s\n",
            ip,
            ntohs(src->sin_port),
            time_str,
            message);
 
+#ifndef USING_R
     fflush(stdout);
+#endif
 }

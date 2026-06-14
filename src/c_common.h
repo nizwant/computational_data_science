@@ -12,13 +12,22 @@
 
 #include "uthash.h"
 
+#ifdef USING_R
+#include <R.h>
+#define PRINTF Rprintf
+#define EPRINTF REprintf
+#else
+#define PRINTF printf
+#define EPRINTF(...) fprintf(stderr, __VA_ARGS__)
+#endif
+
 #define MAX_MESS_SIZE 1024
 #define SERVER_PORT 2137
 #define SERVER_IP "34.51.191.178"
 #define SERVER_USERNAME "server"
 
 #ifdef DEBUG
-#define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#define DEBUG_PRINT(...) PRINTF(__VA_ARGS__)
 #else
 #define DEBUG_PRINT(...) ((void)0)
 #endif

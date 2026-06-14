@@ -1,2 +1,2 @@
-PKG_CPPFLAGS = -I.
+PKG_CPPFLAGS = -I. -DUSING_R
 OBJECTS = RcppExports.o rcpp_peer_chat.o client_lib.o c_common.o
