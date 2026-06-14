@@ -13,8 +13,7 @@ dependencies = [
     "numpy (>=2.4.0,<3.0.0)",
     "matplotlib (>=3.10.8,<4.0.0)",
     "cloud-import (>=0.4,<0.5)",
-    "python-dateutil (>=2.9.0.post0,<3.0.0)",
-    "cython (>=3.2.4,<4.0.0)"
+    "python-dateutil (>=2.9.0.post0,<3.0.0)"
 ]
 
 [dependency-groups]
@@ -26,5 +25,4 @@ dev = [
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
