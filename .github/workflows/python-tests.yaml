@@ -25,8 +25,8 @@ jobs:
             - name: Install dependencies
               run: pip install pytest setuptools
 
-            - name: Build C extension
-              run: python setup.py build_ext --inplace
+            - name: Install package
+              run: pip install .
 
             - name: Run tests
               run: pytest tests/pytest/ -v
