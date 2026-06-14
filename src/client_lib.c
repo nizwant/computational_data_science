@@ -16,7 +16,12 @@ int peer_connect(const char *username, const char *password)
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(SERVER_PORT);
-    if (inet_pton(AF_INET, SERVER_IP, &server_addr.sin_addr) != 1)
+
+    const char *server_ip = getenv("PEERCHAT_SERVER_IP");
+    if (!server_ip)
+        server_ip = SERVER_IP;
+
+    if (inet_pton(AF_INET, server_ip, &server_addr.sin_addr) != 1)
     {
         EPRINTF("bad server IP\n");
         close(client_fd);
