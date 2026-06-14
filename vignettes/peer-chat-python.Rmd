@@ -46,7 +46,7 @@ All functions are available directly from the `PeerChat` namespace:
 The Python script below replicates the C client's interactive loop using
 `select()` to multiplex between stdin and the UDP socket.
 
-```{python client, eval = FALSE}
+```python
 import sys
 import select
 import PeerChat
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
 ## Quick example
 
-```{python quickstart, eval = FALSE}
+```python
 import PeerChat
 
 # Register and connect
