@@ -78,4 +78,22 @@ int send_ping(int fd, struct in_addr ip, uint16_t port)
     return 0;
 }
 
+int send_get_user(int fd, const char *username, const char *password, const struct sockaddr_in *server)
+{
+    PacketHeader header = {0};
+    header.type = GET_PEER;
+
+    GetPeerPacket p = {0};
+    p.header = header;
+    strncpy(p.username, username, sizeof(p.username) - 1);
+    strncpy(p.password, password, sizeof(p.password) - 1);
+
+    if (sendto(fd, &p, sizeof(p), 0, (struct sockaddr *)server, sizeof(*server)) < 0)
+    {
+        perror("sendto");
+        return -1;
+    }
+    return 0;
+}
+
 #endif

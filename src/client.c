@@ -12,7 +12,6 @@ int main(int argc, char **argv)
     const char *password = argv[2];
 
     // create socket and send init message
-    PacketHeader header = {0};
     struct sockaddr_in server = {0};
     int fd = initialize_client(username, password, &server);
     if (fd < 0)
@@ -72,17 +71,7 @@ int main(int argc, char **argv)
 
                 if (sscanf(message, "/get_user %31s %31s", get_username, get_password) == 2)
                 {
-                    // success
-                    header.type = GET_PEER;
-
-                    GetPeerPacket p3;
-                    p3.header = header;
-                    strncpy(p3.username, get_username, sizeof(p3.username) - 1);
-                    strncpy(p3.password, get_password, sizeof(p3.password) - 1);
-                    if (sendto(fd, &p3, sizeof(p3), 0, (struct sockaddr *)&server, sizeof(server)) < 0)
-                    {
-                        perror("sendto");
-                    }
+                    send_get_user(fd, get_username, get_password, &server);
                 }
                 else
                 {
