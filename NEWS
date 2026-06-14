@@ -1,3 +1,10 @@
+## 0.2.0 (2026-06-10)
+
+- Introduced `client_lib` API: `peer_connect`, `peer_send_message`, `peer_send_ping`, `peer_get_user`, `peer_receive`, `peer_disconnect`
+- Hashmap internally in C - hidden from the users
+- Added `DEBUG_PRINT` macro for compile-time debug output (`-DDEBUG`)
+- Cleaned up project structure: removed `shared_patterns.h` and `client.h`
+
 ## 0.1.0 (2026-05-31)
 
 - Initial release

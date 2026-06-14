@@ -1,8 +1,8 @@
 Package: PeerChat
 Type: Package
 Title: PeerChat: Peer-to-Peer Messaging Library
-Version: 0.0.1
-Date: 2026-06-01
+Version: 0.2.0
+Date: 2026-06-14
 Authors@R:
     person("Mateusz", "Nizwantowski",
         role = c("aut", "cre"),
