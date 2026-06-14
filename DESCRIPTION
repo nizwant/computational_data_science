@@ -1,6 +1,6 @@
 Package: PeerChat
 Type: Package
-Title: PeerChat: Peer-to-Peer Messaging Library
+Title: Peer-to-Peer Messaging Library
 Version: 0.3.0
 Date: 2026-06-14
 Authors@R:
