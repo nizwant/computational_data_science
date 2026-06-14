@@ -59,7 +59,7 @@ peer_connect("my_username", "my_password")
 peer_get_user("friend", "friends_password")
 
 # Send a message
-peer_send_message("friend", "Hello!")
+peer_send_message("friend", "Hello my friend!")
 
 # Receive incoming packets
 peer_receive(1000)
@@ -67,6 +67,12 @@ peer_receive(1000)
 # Disconnect
 peer_disconnect()
 ```
+
+## Computational Data Science
+
+This repo is for WUT course aimed at learning C with Data Science
+algorithms in mind. It features a peer-to-peer messaging built on UDP
+with a central synchronization server for peer discovery.
 
 ## Course materials
 

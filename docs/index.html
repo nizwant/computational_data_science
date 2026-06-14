@@ -38,6 +38,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/peer-chat-client.html">Interactive PeerChat Client in R</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -118,13 +124,18 @@
 <span><span class="fu"><a href="reference/peer_get_user.html">peer_get_user</a></span><span class="op">(</span><span class="st">"friend"</span>, <span class="st">"friends_password"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Send a message</span></span>
-<span><span class="fu"><a href="reference/peer_send_message.html">peer_send_message</a></span><span class="op">(</span><span class="st">"friend"</span>, <span class="st">"Hello!"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/peer_send_message.html">peer_send_message</a></span><span class="op">(</span><span class="st">"friend"</span>, <span class="st">"Hello my friend!"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Receive incoming packets</span></span>
 <span><span class="fu"><a href="reference/peer_receive.html">peer_receive</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Disconnect</span></span>
 <span><span class="fu"><a href="reference/peer_disconnect.html">peer_disconnect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="computational-data-science">Computational Data Science<a class="anchor" aria-label="anchor" href="#computational-data-science"></a>
+</h2>
+<p>This repo is for WUT course aimed at learning C with Data Science algorithms in mind. It features a peer-to-peer messaging built on UDP with a central synchronization server for peer discovery.</p>
 </div>
 <div class="section level2">
 <h2 id="course-materials">Course materials<a class="anchor" aria-label="anchor" href="#course-materials"></a>

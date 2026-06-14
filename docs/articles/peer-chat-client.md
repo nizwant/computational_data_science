@@ -1,0 +1,113 @@
+# Interactive PeerChat Client in R
+
+This vignette shows how to build an interactive peer-to-peer chat client
+in R using the PeerChat package, replicating the original client written
+in C.
+
+## The C client
+
+The original C client uses `select()` to multiplex between stdin and the
+UDP socket. It supports four commands:
+
+- `/get_user <username> <password>` — discover a peer via the server
+- `/message <username> <message>` — send a message to a discovered peer
+- `/ping <username>` — ping a discovered peer
+- `/quit` — disconnect and exit
+
+## R equivalent
+
+The R script below replicates this behaviour. R does not expose
+`select()` on stdin, we use can
+[`readline()`](https://rdrr.io/r/base/readline.html) in a loop with
+short non-blocking receives between prompts.
+
+``` r
+
+library(PeerChat)
+
+peer_chat_client <- function(username, password) {
+  # Connect to the synchronization server
+  peer_connect(username, password)
+  cat(sprintf("Connected as '%s'. Type /help for commands.\n", username))
+
+  repeat {
+    # Non-blocking receive to process any incoming packets
+    peer_receive(100L)
+
+    # Read user input
+    input <- readline("> ")
+    input <- trimws(input)
+
+    if (input == "/quit") {
+      break
+    } else if (input == "/help") {
+      cat(
+        "Commands:\n",
+        "  /get_user <username> <password>  — discover a peer\n",
+        "  /message  <username> <text>      — send a message\n",
+        "  /ping     <username>             — ping a peer\n",
+        "  /quit                            — disconnect and exit\n"
+      )
+    } else if (startsWith(input, "/get_user")) {
+      parts <- strsplit(input, "\\s+")[[1]]
+      if (length(parts) == 3) {
+        peer_get_user(parts[2], parts[3])
+      } else {
+        cat("Usage: /get_user <username> <password>\n")
+      }
+    } else if (startsWith(input, "/message")) {
+      parts <- strsplit(input, "\\s+", perl = TRUE)[[1]]
+      if (length(parts) >= 3) {
+        recipient <- parts[2]
+        message <- paste(parts[-(1:2)], collapse = " ")
+        tryCatch(
+          peer_send_message(recipient, message),
+          error = function(e) cat(sprintf("Peer '%s' not found. Use /get_user first.\n", recipient))
+        )
+      } else {
+        cat("Usage: /message <username> <text>\n")
+      }
+    } else if (startsWith(input, "/ping")) {
+      parts <- strsplit(input, "\\s+")[[1]]
+      if (length(parts) == 2) {
+        tryCatch(
+          peer_send_ping(parts[2]),
+          error = function(e) cat(sprintf("Peer '%s' not found. Use /get_user first.\n", parts[2]))
+        )
+      } else {
+        cat("Usage: /ping <username>\n")
+      }
+    } else if (nchar(input) > 0) {
+      cat("Unknown command. Type /help for usage.\n")
+    }
+  }
+
+  peer_disconnect()
+  cat("Disconnected.\n")
+}
+```
+
+## Running the client
+
+Start the synchronization server first on machine accessible from
+internet (compiled from `src/server.c`), then launch the R client:
+
+``` r
+
+peer_chat_client("nizwan", "secret123")
+```
+
+Open a second terminal and start another client (R or C) to chat:
+
+``` r
+
+peer_chat_client("rex", "rex_password")
+```
+
+## Example session
+
+    > /get_user rex rex_password
+    > /message rex Hello from R!
+    > /ping rex
+    > /quit
+    Disconnected.
