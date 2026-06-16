@@ -24,7 +24,7 @@
 
 #define MAX_MESS_SIZE 1024
 #define SERVER_PORT 2137
-#define SERVER_IP "34.51.191.178"
+#define SERVER_IP "34.28.136.103"
 #define SERVER_USERNAME "server"
 
 #ifdef DEBUG
